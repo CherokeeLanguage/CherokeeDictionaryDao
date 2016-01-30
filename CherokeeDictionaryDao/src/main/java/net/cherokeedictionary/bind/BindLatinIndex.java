@@ -15,14 +15,14 @@ import net.cherokeedictionary.model.DictionaryEntry;
 import net.cherokeedictionary.model.DictionaryEntry.EntryExample;
 import net.cherokeedictionary.model.DictionaryEntry.EntryForm;
 
-@BindingAnnotation(BindTranslitIndex.Factory.class)
+@BindingAnnotation(BindLatinIndex.Factory.class)
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ ElementType.PARAMETER })
-public @interface BindTranslitIndex {
+public @interface BindLatinIndex {
 	public static class Factory implements BinderFactory {
-		public Binder<BindTranslitIndex, DictionaryEntry> build(Annotation annotation) {
-			return new Binder<BindTranslitIndex, DictionaryEntry>() {
-				public void bind(SQLStatement<?> q, BindTranslitIndex bind, DictionaryEntry record) {
+		public Binder<BindLatinIndex, DictionaryEntry> build(Annotation annotation) {
+			return new Binder<BindLatinIndex, DictionaryEntry>() {
+				public void bind(SQLStatement<?> q, BindLatinIndex bind, DictionaryEntry record) {
 					String syllabary = null;
 					String pronunciation=null;
 					String definition=null;
