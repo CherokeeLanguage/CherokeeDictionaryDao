@@ -1,14 +1,13 @@
 package net.cherokeedictionary.dao;
 
-import java.beans.PropertyVetoException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.Properties;
 
 import org.skife.jdbi.v2.tweak.ConnectionFactory;
 
@@ -17,7 +16,7 @@ import com.mchange.v2.c3p0.ConnectionCustomizer;
 import com.mchange.v2.log.MLevel;
 import com.mysql.jdbc.AbandonedConnectionCleanupThread;
 
-public abstract class Db implements ConnectionCustomizer, ConnectionFactory {
+public class Db implements ConnectionFactory, ConnectionCustomizer {
 
 	public static void destroy() {
 		try {
@@ -60,6 +59,10 @@ public abstract class Db implements ConnectionCustomizer, ConnectionFactory {
 
 	private static ComboPooledDataSource pool;
 
+	private static String username;
+
+	private static String password;
+
 	static {
 		System.setProperty("com.mchange.v2.log.MLog", "com.mchange.v2.log.FallbackMLog");
 		System.setProperty("com.mchange.v2.log.FallbackMLog.DEFAULT_CUTOFF_LEVEL", MLevel.WARNING.getSeverity());
@@ -67,14 +70,8 @@ public abstract class Db implements ConnectionCustomizer, ConnectionFactory {
 				"com.mchange.v2.c3p0.management.NullManagementCoordinator");
 	}
 
-	protected Db() {
+	public Db() {
 	}
-
-	public ConnectionCustomizer connectionConfigClass() {
-		return this;
-	}
-
-	private static final Object lock = new Object();
 
 	private static synchronized void init() {
 		if (initDone) {
@@ -85,6 +82,8 @@ public abstract class Db implements ConnectionCustomizer, ConnectionFactory {
 	}
 
 	private static synchronized void initConnectionPool() {
+		loadDbPropertiesFile();
+		
 		if (pool!=null) {
 			ComboPooledDataSource tmp = pool;
 			pool=null;
@@ -93,16 +92,30 @@ public abstract class Db implements ConnectionCustomizer, ConnectionFactory {
 			tmp.close();
 		}
 		pool = new ComboPooledDataSource();
-		try {
-			/*
-			 * TomCat memory control.
-			 */
-			pool.setContextClassLoaderSource("library");
-			pool.setDriverClass(com.mysql.jdbc.Driver.class.getCanonicalName());
-			pool.setPrivilegeSpawnedThreads(true);
-		} catch (PropertyVetoException e) {
+		pool.setUser(username);
+		pool.setPassword(password);
+	}
+
+	private static void loadDbPropertiesFile() {
+		Properties props = new Properties();
+		InputStream is = new Object().getClass().getResourceAsStream("/db.properties");
+		if (is==null) {
+			is=Db.class.getResourceAsStream("/db.properties");
 		}
-		pool.setConnectionCustomizerClassName(Db.class.getName());
+		if (is==null) {
+			throw new RuntimeException("Unable to read db.properties file! Put one into src/main/resources/.");
+		}
+		try {
+			props.load(is);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+		try {
+			is.close();
+		} catch (IOException e) {
+		}
+		username=props.getProperty("jdbc.username");
+		password=props.getProperty("jdbc.password");
 	}
 
 	/**
@@ -120,7 +133,7 @@ public abstract class Db implements ConnectionCustomizer, ConnectionFactory {
 			throw new RuntimeException(e);
 		}
 	}
-
+	
 	@Override
 	public void onAcquire(Connection arg0, String arg1) throws Exception {
 	}
