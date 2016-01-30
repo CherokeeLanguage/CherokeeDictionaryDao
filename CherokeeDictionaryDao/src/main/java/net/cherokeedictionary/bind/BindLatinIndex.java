@@ -50,20 +50,28 @@ public @interface BindLatinIndex {
 					StringBuilder sb = new StringBuilder();
 					if (record.forms!=null) {
 						for (EntryForm form: record.forms) {
-							sb.append(form.latin);
-							sb.append("\n");
-							sb.append(DaoUtils.syllabaryTranslit(form.syllabary));
-							sb.append("\n");
+							if (form.latin!=null) {
+								sb.append(form.latin);
+								sb.append("\n");
+							}
+							if (form.syllabary!=null) {
+								sb.append(DaoUtils.syllabaryTranslit(form.syllabary));
+								sb.append("\n");
+							}
 						}
 					}
 					q.bind("forms", sb.toString());
 					sb.setLength(0);
 					if (record.examples!=null) {
 						for (EntryExample example: record.examples) {
-							sb.append(example.latin);
-							sb.append("\n");
-							sb.append(DaoUtils.syllabaryTranslit(example.syllabary));
-							sb.append("\n");
+							if (example.latin!=null) {
+								sb.append(example.latin);
+								sb.append("\n");
+							}
+							if (example.syllabary!=null) {
+								sb.append(DaoUtils.syllabaryTranslit(example.syllabary));
+								sb.append("\n");
+							}
 						}
 					}
 					q.bind("examples", sb.toString());
