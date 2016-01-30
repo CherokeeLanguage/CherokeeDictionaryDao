@@ -44,7 +44,7 @@ public @interface BindLatinIndex {
 					q.bind("id", record.id);
 					q.bind("source", record.source);
 					q.bind("syllabary", syllabary);
-					q.bind("pronunciation", DaoUtils.properFormedPronunciation(pronunciation));
+					q.bind("pronunciation", DaoUtils.properPronunciation(pronunciation));
 					q.bind("definition", definition);
 					
 					StringBuilder sb = new StringBuilder();
