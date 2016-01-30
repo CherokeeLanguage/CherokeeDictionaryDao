@@ -33,6 +33,27 @@ public class DaoUtils {
 		return pronunciation;
 	}
 	
+	public static String asciiPronunciation(String pronunciation) {
+		pronunciation=pronunciation.replace("ạ", "a.");
+		pronunciation=pronunciation.replace("ẹ", "e.");
+		pronunciation=pronunciation.replace("ị", "i.");
+		pronunciation=pronunciation.replace("ọ", "o.");
+		pronunciation=pronunciation.replace("ụ", "u.");
+		pronunciation=pronunciation.replace("ṿ", "v.");
+		pronunciation=pronunciation.replace("Ạ", "A.");
+		pronunciation=pronunciation.replace("Ẹ", "E.");
+		pronunciation=pronunciation.replace("Ị", "I.");
+		pronunciation=pronunciation.replace("Ọ", "O.");
+		pronunciation=pronunciation.replace("Ụ", "U.");
+		pronunciation=pronunciation.replace("Ṿ", "V.");
+		pronunciation=pronunciation.replace("¹", "1");
+		pronunciation=pronunciation.replace("²", "2");
+		pronunciation=pronunciation.replace("³", "3");
+		pronunciation=pronunciation.replace("⁴", "4");
+		pronunciation=pronunciation.replace("ɂ", "?");
+		return pronunciation;
+	}
+	
 	public static java.sql.Timestamp asSqlTimestamp(Date date) {
 		return date!=null?new java.sql.Timestamp(date.getTime()):null;
 	}
