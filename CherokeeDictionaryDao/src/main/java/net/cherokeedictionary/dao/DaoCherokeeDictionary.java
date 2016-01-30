@@ -111,7 +111,7 @@ public interface DaoCherokeeDictionary {
 	@SqlBatch("insert into " + table_entries + " (id, source, syllabary, pronunciation, definition, json, created)"
 			+ " select * from " + "(select :id as id, :source as source, :syllabary as syllabary,"
 			+ " :pronunciation as pronunciation, :definition as definition, :json as json, NOW() as created) as TMP"
-			+ " where not exists (select 1 from " + table_entries + " where id=:id AND :id!=0")
+			+ " where not exists (select 1 from " + table_entries + " where id=:id AND :id!=0)")
 	@BatchChunkSize(25)
 	@GetGeneratedKeys
 	public int[] addNewDictionaryEntriesWithId(@BindDictionaryEntry Iterable<DictionaryEntry> entries);
