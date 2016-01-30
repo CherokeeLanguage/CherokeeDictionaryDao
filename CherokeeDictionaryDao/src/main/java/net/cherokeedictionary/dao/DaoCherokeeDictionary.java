@@ -53,6 +53,8 @@ public interface DaoCherokeeDictionary {
 			+ "  `id` BIGINT NOT NULL AUTO_INCREMENT,\n" + "  `source` VARCHAR(16) NULL,\n"
 			+ "  `syllabary` VARCHAR(254) NULL,\n" + "  `pronunciation` VARCHAR(254) NULL,\n"
 			+ "  `definition` VARCHAR(254) NULL,\n" + "  `forms` LONGTEXT NULL,\n" + "  `examples` LONGTEXT NULL,\n"
+			+ "  `created` DATETIME NULL,\n"
+			+ "  `modified` TIMESTAMP NULL DEFAULT current_timestamp on update current_timestamp,\n"
 			+ "  PRIMARY KEY (`id`),\n" + "  INDEX `source` (`source` ASC),\n"
 			+ "  FULLTEXT INDEX `forms` (`forms` ASC),\n" + "  FULLTEXT INDEX `examples` (`examples` ASC))\n"
 			+ "ENGINE = MyISAM\n" + "DEFAULT CHARACTER SET = utf8\n" + // utf8mb4
@@ -68,7 +70,10 @@ public interface DaoCherokeeDictionary {
 	@SqlUpdate("CREATE TABLE IF NOT EXISTS " + table_indexLatin + " (\n" + "  `id` BIGINT NOT NULL AUTO_INCREMENT,\n"
 			+ "  `source` VARCHAR(16) NULL,\n" + "  `syllabary` VARCHAR(254) NULL,\n"
 			+ "  `pronunciation` VARCHAR(254) NULL,\n" + "  `definition` VARCHAR(254) NULL,\n"
-			+ "  `forms` LONGTEXT NULL,\n" + "  `examples` LONGTEXT NULL,\n" + "  PRIMARY KEY (`id`),\n"
+			+ "  `forms` LONGTEXT NULL,\n" + "  `examples` LONGTEXT NULL,\n"
+			+ "  `created` DATETIME NULL,\n"
+			+ "  `modified` TIMESTAMP NULL DEFAULT current_timestamp on update current_timestamp,\n"
+			+ "  PRIMARY KEY (`id`),\n"
 			+ "  INDEX `source` (`source` ASC),\n" + "  FULLTEXT INDEX `forms` (`forms` ASC),\n"
 			+ "  FULLTEXT INDEX `examples` (`examples` ASC))\n" + "ENGINE = MyISAM\n" + "DEFAULT CHARACTER SET = utf8\n"
 			+ // utf8mb4 is not available for mysql 5.0.x
@@ -78,7 +83,10 @@ public interface DaoCherokeeDictionary {
 	@SqlUpdate("CREATE TABLE IF NOT EXISTS " + table_indexEnglish + " (\n" + "  `id` BIGINT NOT NULL AUTO_INCREMENT,\n"
 			+ "  `source` VARCHAR(16) NULL,\n" + "  `syllabary` VARCHAR(254) NULL,\n"
 			+ "  `pronunciation` VARCHAR(254) NULL,\n" + "  `definition` VARCHAR(254) NULL,\n"
-			+ "  `forms` LONGTEXT NULL,\n" + "  `examples` LONGTEXT NULL,\n" + "  PRIMARY KEY (`id`),\n"
+			+ "  `forms` LONGTEXT NULL,\n" + "  `examples` LONGTEXT NULL,\n"
+			+ "  `created` DATETIME NULL,\n"
+			+ "  `modified` TIMESTAMP NULL DEFAULT current_timestamp on update current_timestamp,\n"
+			+ "  PRIMARY KEY (`id`),\n"
 			+ "  INDEX `source` (`source` ASC),\n" + "  FULLTEXT INDEX `forms` (`forms` ASC),\n"
 			+ "  FULLTEXT INDEX `examples` (`examples` ASC))\n" + "ENGINE = MyISAM\n" + "DEFAULT CHARACTER SET = utf8\n"
 			+ // utf8mb4 is not available for mysql 5.0.x
@@ -220,7 +228,7 @@ public interface DaoCherokeeDictionary {
 		}
 	}
 
-	@SqlQuery("select id, source, json from "+table_entries+" where indexed is null OR indexed = 0 OR modified>=indexed limit :limit")
+	@SqlQuery("select id, source, json, modified from "+table_entries+" where indexed is null OR indexed = 0 OR modified>=indexed limit :limit")
 	@RegisterMapper(MapperDictionaryEntry.class)
 	public List<DictionaryEntry> needsIndexing(@Bind("limit")int limit);
 	
