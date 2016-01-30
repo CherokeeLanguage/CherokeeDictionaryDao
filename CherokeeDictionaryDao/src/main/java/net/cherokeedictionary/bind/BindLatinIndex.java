@@ -52,6 +52,8 @@ public @interface BindLatinIndex {
 						for (EntryForm form: record.forms) {
 							sb.append(form.latin);
 							sb.append("\n");
+							sb.append(DaoUtils.syllabaryTranslit(form.syllabary));
+							sb.append("\n");
 						}
 					}
 					q.bind("forms", sb.toString());
@@ -59,6 +61,8 @@ public @interface BindLatinIndex {
 					if (record.examples!=null) {
 						for (EntryExample example: record.examples) {
 							sb.append(example.latin);
+							sb.append("\n");
+							sb.append(DaoUtils.syllabaryTranslit(example.syllabary));
 							sb.append("\n");
 						}
 					}
