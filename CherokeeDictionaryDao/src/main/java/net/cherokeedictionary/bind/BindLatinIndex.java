@@ -37,7 +37,10 @@ public @interface BindLatinIndex {
 					if (record.definitions!=null) {
 						definition="";
 						for (String def: record.definitions) {
-							definition+=(";"+def);
+							if (!definition.isEmpty()) {
+								definition+=";";
+							}
+							definition+=def;
 						}
 					}
 					
@@ -50,31 +53,31 @@ public @interface BindLatinIndex {
 					StringBuilder sb = new StringBuilder();
 					if (record.forms!=null) {
 						for (EntryForm form: record.forms) {
-							if (form.latin!=null) {
+							if (form.latin!=null && !form.latin.isEmpty()) {
 								sb.append(form.latin);
 								sb.append("\n");
 							}
-							if (form.syllabary!=null) {
+							if (form.syllabary!=null && !form.syllabary.isEmpty()) {
 								sb.append(DaoUtils.syllabaryTranslit(form.syllabary));
 								sb.append("\n");
 							}
 						}
 					}
-					q.bind("forms", sb.toString());
+					q.bind("forms", sb.toString().replaceAll("<.*?>", ""));
 					sb.setLength(0);
 					if (record.examples!=null) {
 						for (EntryExample example: record.examples) {
-							if (example.latin!=null) {
+							if (example.latin!=null && !example.latin.isEmpty()) {
 								sb.append(example.latin);
 								sb.append("\n");
 							}
-							if (example.syllabary!=null) {
+							if (example.syllabary!=null && !example.syllabary.isEmpty()) {
 								sb.append(DaoUtils.syllabaryTranslit(example.syllabary));
 								sb.append("\n");
 							}
 						}
 					}
-					q.bind("examples", sb.toString());
+					q.bind("examples", sb.toString().replaceAll("<.*?>", ""));
 				}
 			};
 		}

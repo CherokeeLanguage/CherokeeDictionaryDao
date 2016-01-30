@@ -37,7 +37,10 @@ public @interface BindSyllabaryIndex {
 					if (record.definitions!=null) {
 						definition="";
 						for (String def: record.definitions) {
-							definition+=(";"+def);
+							if (!definition.isEmpty()) {
+								definition+=";";
+							}
+							definition+=def;
 						}
 					}
 					
@@ -50,23 +53,23 @@ public @interface BindSyllabaryIndex {
 					StringBuilder sb = new StringBuilder();
 					if (record.forms!=null) {
 						for (EntryForm form: record.forms) {
-							if (form.syllabary!=null) {
+							if (form.syllabary!=null && !form.syllabary.isEmpty()) {
 								sb.append(form.syllabary);
 								sb.append("\n");
 							}
 						}
 					}
-					q.bind("forms", sb.toString());
+					q.bind("forms", sb.toString().replaceAll("<.*?>", ""));
 					sb.setLength(0);
 					if (record.examples!=null) {
 						for (EntryExample example: record.examples) {
-							if (example.syllabary!=null) {
+							if (example.syllabary!=null && !example.syllabary.isEmpty()) {
 								sb.append(example.syllabary);
 								sb.append("\n");
 							}
 						}
 					}
-					q.bind("examples", sb.toString());
+					q.bind("examples", sb.toString().replaceAll("<.*?>", ""));
 				}
 			};
 		}

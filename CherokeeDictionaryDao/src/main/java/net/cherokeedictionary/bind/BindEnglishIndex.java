@@ -49,21 +49,26 @@ public @interface BindEnglishIndex {
 					StringBuilder sb = new StringBuilder();
 					if (record.definitions!=null) {
 						for (String def: record.definitions) {
-							sb.append(def);
-							sb.append("\n");
+							if (def==null||def.isEmpty()) {
+								continue;
+							}
+							if (!definition.isEmpty()) {
+								definition+=";";
+							}
+							definition+=def;
 						}
 					}
-					q.bind("forms", sb.toString());
+					q.bind("forms", sb.toString().replaceAll("<.*?>", ""));
 					sb.setLength(0);
 					if (record.examples!=null) {
 						for (EntryExample example: record.examples) {
-							if (example.english!=null) {
+							if (example.english!=null && !example.english.isEmpty()) {
 								sb.append(example.english);
 								sb.append("\n");
 							}
 						}
 					}
-					q.bind("examples", sb.toString());
+					q.bind("examples", sb.toString().replaceAll("<.*?>", ""));
 				}
 			};
 		}
