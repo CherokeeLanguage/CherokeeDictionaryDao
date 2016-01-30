@@ -1,4 +1,4 @@
-package net.cherokeedictionary.conversion;
+package net.cherokeedictionary.util.conversion;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
