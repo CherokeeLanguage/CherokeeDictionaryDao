@@ -36,7 +36,10 @@ public @interface BindEnglishIndex {
 					if (record.definitions!=null) {
 						definition="";
 						for (String def: record.definitions) {
-							definition+=(";"+def);
+							if (!definition.isEmpty()) {
+								definition+=";";
+							}
+							definition+=def;
 						}
 					}
 					
