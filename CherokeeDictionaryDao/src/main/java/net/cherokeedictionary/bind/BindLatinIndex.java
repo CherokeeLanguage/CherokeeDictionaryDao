@@ -58,7 +58,11 @@ public @interface BindLatinIndex {
 								sb.append("\n");
 							}
 							if (form.syllabary!=null && !form.syllabary.isEmpty()) {
-								sb.append(DaoUtils.syllabaryTranslit(form.syllabary));
+								String syllabaryTranslit = DaoUtils.syllabaryTranslit(form.syllabary);
+								if (syllabaryTranslit.equalsIgnoreCase(form.latin)){
+									continue;
+								}
+								sb.append(syllabaryTranslit);
 								sb.append("\n");
 							}
 						}
@@ -72,7 +76,11 @@ public @interface BindLatinIndex {
 								sb.append("\n");
 							}
 							if (example.syllabary!=null && !example.syllabary.isEmpty()) {
-								sb.append(DaoUtils.syllabaryTranslit(example.syllabary));
+								String syllabaryTranslit = DaoUtils.syllabaryTranslit(example.syllabary);
+								if (syllabaryTranslit.equalsIgnoreCase(example.latin)){
+									continue;
+								}
+								sb.append(syllabaryTranslit);
 								sb.append("\n");
 							}
 						}
