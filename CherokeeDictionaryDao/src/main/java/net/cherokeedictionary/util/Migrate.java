@@ -44,10 +44,11 @@ public class Migrate {
 		for (int ix=0; ix<newRecords.size(); ix+=100) {
 			int s=ix;
 			int e=Math.min(ix+100, newRecords.size());
-			System.out.println("Updating pre-existing records...");
+			System.out.println("\tUpdating pre-existing records...");
 			dao.updateDictionaryEntries(newRecords.subList(s, e));
-			System.out.println("Adding new records...");
+			System.out.println("\tAdding new records...");
 			dao.addNewDictionaryEntriesWithId(newRecords.subList(s, e));
 		}
+		System.out.println("DONE");
 	}
 }
