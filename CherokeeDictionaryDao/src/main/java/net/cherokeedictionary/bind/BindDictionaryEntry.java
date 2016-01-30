@@ -35,14 +35,17 @@ public @interface BindDictionaryEntry {
 					if (record.definitions!=null) {
 						definition="";
 						for (String def: record.definitions) {
-							definition+=(";"+def);
+							if (!definition.isEmpty()) {
+								definition+=";";
+							}
+							definition+=def;
 						}
 					}
 					
 					q.bind("id", record.id);
 					q.bind("source", record.source);
 					q.bind("syllabary", syllabary);
-					q.bind("pronunciation", pronunciation);
+					q.bind("pronunciation", DaoUtils.properFormedPronunciation(pronunciation));
 					q.bind("definition", definition);
 					q.bind("json", DaoUtils.json.toJson(record));
 				}

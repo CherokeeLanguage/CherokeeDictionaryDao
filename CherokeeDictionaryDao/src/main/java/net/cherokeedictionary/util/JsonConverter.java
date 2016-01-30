@@ -43,7 +43,7 @@ public class JsonConverter {
 		mapper.setSerializationInclusion(Include.NON_NULL);
 
 		// include java specific type info as part of json
-		mapper.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
+//		mapper.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
 
 		// Deserialization Settings
 		mapper.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);

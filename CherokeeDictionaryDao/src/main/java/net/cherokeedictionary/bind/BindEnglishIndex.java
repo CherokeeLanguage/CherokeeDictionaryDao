@@ -13,6 +13,7 @@ import org.skife.jdbi.v2.sqlobject.BindingAnnotation;
 
 import net.cherokeedictionary.model.DictionaryEntry;
 import net.cherokeedictionary.model.DictionaryEntry.EntryExample;
+import net.cherokeedictionary.util.DaoUtils;
 
 @BindingAnnotation(BindEnglishIndex.Factory.class)
 @Retention(RetentionPolicy.RUNTIME)
@@ -42,7 +43,7 @@ public @interface BindEnglishIndex {
 					q.bind("id", record.id);
 					q.bind("source", record.source);
 					q.bind("syllabary", syllabary);
-					q.bind("pronunciation", pronunciation);
+					q.bind("pronunciation", DaoUtils.properFormedPronunciation(pronunciation));
 					q.bind("definition", definition);
 					
 					StringBuilder sb = new StringBuilder();
