@@ -48,6 +48,7 @@ public @interface BindDictionaryEntry {
 					q.bind("pronunciation", DaoUtils.unicodePronunciation(pronunciation));
 					q.bind("definition", definition);
 					q.bind("json", DaoUtils.json.toJson(record));
+					q.bind("modified", DaoUtils.asSqlTimestamp(record.modified));
 				}
 			};
 		}

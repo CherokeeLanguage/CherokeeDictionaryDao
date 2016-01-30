@@ -10,15 +10,19 @@ import org.skife.jdbi.v2.sqlobject.SqlQuery;
 import org.skife.jdbi.v2.sqlobject.SqlUpdate;
 import org.skife.jdbi.v2.sqlobject.customizers.BatchChunkSize;
 import org.skife.jdbi.v2.sqlobject.customizers.RegisterMapper;
+import org.skife.jdbi.v2.sqlobject.stringtemplate.UseStringTemplate3StatementLocator;
+import org.skife.jdbi.v2.unstable.BindIn;
 
 import net.cherokeedictionary.bind.BindDictionaryEntry;
 import net.cherokeedictionary.bind.BindEnglishIndex;
 import net.cherokeedictionary.bind.BindLatinIndex;
 import net.cherokeedictionary.bind.BindSyllabaryIndex;
+import net.cherokeedictionary.map.MapperDictionaryEntry;
 import net.cherokeedictionary.map.MapperLikespreadsheet;
 import net.cherokeedictionary.model.DictionaryEntry;
 import net.cherokeedictionary.model.LikeSpreadsheetsRecord;
 
+@UseStringTemplate3StatementLocator
 public interface DaoCherokeeDictionary {
 
 	public String table_entries = "dictionary_entries";
@@ -215,4 +219,21 @@ public interface DaoCherokeeDictionary {
 			dao._initDictionaryTable();
 		}
 	}
+
+	@SqlQuery("select id, source, json from "+table_entries+" where indexed is null OR indexed = 0 OR modified>=indexed limit :limit")
+	@RegisterMapper(MapperDictionaryEntry.class)
+	public List<DictionaryEntry> needsIndexing(@Bind("limit")int limit);
+	
+	@SqlQuery("select id, json from "+table_entries+" where id in (<ids>)")
+	@RegisterMapper(MapperDictionaryEntry.class)
+	public List<DictionaryEntry> entriesById(@BindIn("ids")Iterable<Integer> ids);
+
+	/**
+	 * update indexed without updating modified and verifying to do the update by an unchanged modified
+	 * @param forIndexing
+	 */
+	@SqlBatch("update "+table_entries+" set indexed=now(), modified=modified"
+			+ " where id=:id and modified=:modified")
+	@BatchChunkSize(25)
+	public int[] updateIndexMarksById(@BindDictionaryEntry Iterable<DictionaryEntry> forIndexing);
 }

@@ -12,6 +12,24 @@ public class DaoUtils {
 		json = new JsonConverter();
 	}
 	
+	public static int getUpdateCount(int[] counts) {
+		int sum=0;
+		for (int c: counts) {
+			sum+=c;
+		}
+		return sum;
+	}
+	
+	public static int getInsertCount(int[] ids) {
+		int sum=0;
+		for (int id: ids) {
+			if (id!=0) {
+				sum++;
+			}
+		}
+		return sum;
+	}
+	
 	public static String unicodePronunciation(String pronunciation) {
 		pronunciation=pronunciation.replace("a.", "ạ");
 		pronunciation=pronunciation.replace("e.", "ẹ");
