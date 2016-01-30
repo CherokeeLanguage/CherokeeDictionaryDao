@@ -41,9 +41,13 @@ public class Migrate {
 			entry.source=old.source;
 			newRecords.add(entry);
 		}
-		System.out.println("Updating pre-existing records...");
-		dao.updateDictionaryEntries(newRecords);
-		System.out.println("Adding new records...");
-		dao.addNewDictionaryEntriesWithId(newRecords);
+		for (int ix=0; ix<newRecords.size(); ix+=100) {
+			int s=ix;
+			int e=Math.min(ix, newRecords.size());
+			System.out.println("Updating pre-existing records...");
+			dao.updateDictionaryEntries(newRecords.subList(s, e));
+			System.out.println("Adding new records...");
+			dao.addNewDictionaryEntriesWithId(newRecords.subList(s, e));
+		}
 	}
 }
