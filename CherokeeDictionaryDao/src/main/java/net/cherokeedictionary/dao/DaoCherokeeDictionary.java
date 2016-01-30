@@ -203,13 +203,13 @@ public interface DaoCherokeeDictionary {
 	@GetGeneratedKeys
 	public int[] addNewIndexLatinEntriesById(@BindLatinIndex Iterable<DictionaryEntry> entries);
 
-	@SqlBatch("update " + table_indexEnglish + " set source=:source, syllabary=:syllabary, pronunciation=:pronunciation,"
+	@SqlBatch("update " + table_indexLatin + " set source=:source, syllabary=:syllabary, pronunciation=:pronunciation,"
 			+ " definition=:definition, forms=:forms, examples=:examples"
 			+ " where id=:id")
 	@BatchChunkSize(25)
 	public int[] updateIndexLatinEntriesById(@BindLatinIndex Iterable<DictionaryEntry> entry);
 	
-	@SqlBatch("delete from "+table_indexEnglish+" where id=:id")
+	@SqlBatch("delete from "+table_indexLatin+" where id=:id")
 	@BatchChunkSize(25)
 	public int[] deleteIndexLatinEntriesById(@Bind("id")Iterable<Integer>ids);
 	
@@ -241,7 +241,7 @@ public interface DaoCherokeeDictionary {
 	 * @param forIndexing
 	 */
 	@SqlBatch("update "+table_entries+" set indexed=now(), modified=modified"
-			+ " where id=:id and modified=:modified")
+			+ " where id=:id and CAST(modified as DATETIME) = CAST(:modified as DATETIME)")
 	@BatchChunkSize(25)
 	public int[] updateIndexMarksById(@BindDictionaryEntry Iterable<DictionaryEntry> forIndexing);
 }
