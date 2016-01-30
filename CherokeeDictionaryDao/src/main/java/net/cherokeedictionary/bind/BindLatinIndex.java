@@ -63,7 +63,7 @@ public @interface BindLatinIndex {
 							}
 						}
 					}
-					q.bind("forms", sb.toString().replaceAll("<.*?>", ""));
+					q.bind("forms", sb.toString().replaceAll("<.*?>", "").trim());
 					sb.setLength(0);
 					if (record.examples!=null) {
 						for (EntryExample example: record.examples) {
@@ -77,7 +77,7 @@ public @interface BindLatinIndex {
 							}
 						}
 					}
-					q.bind("examples", sb.toString().replaceAll("<.*?>", ""));
+					q.bind("examples", sb.toString().replaceAll("<.*?>", "").trim());
 				}
 			};
 		}
