@@ -98,7 +98,7 @@ public interface DaoCherokeeDictionary {
 	 * @return
 	 */
 	@SqlBatch("insert into " + table_entries + " (source, syllabary, pronunciation, definition, json, created)"
-			+ "values" + "(:source, :syllabary, :pronunciation, :definition, :json, NOW())")
+			+ " values " + "(:source, :syllabary, :pronunciation, :definition, :json, NOW())")
 	@GetGeneratedKeys
 	public int[] addNewDictionaryEntries(@BindDictionaryEntry Iterable<DictionaryEntry> entries);
 
@@ -109,7 +109,7 @@ public interface DaoCherokeeDictionary {
 	 * @return
 	 */
 	@SqlBatch("insert into " + table_entries + " (id, source, syllabary, pronunciation, definition, json, created)"
-			+ "select * from " + "(select :id as id, :source as source, :syllabary as syllabary,"
+			+ " select * from " + "(select :id as id, :source as source, :syllabary as syllabary,"
 			+ " :pronunciation as pronunciation, :definition as definition, :json as json, NOW() as created) as TMP"
 			+ " where not exists (select 1 from " + table_entries + " where id=:id AND :id!=0")
 	@BatchChunkSize(25)
@@ -137,7 +137,7 @@ public interface DaoCherokeeDictionary {
 	 */
 	@SqlBatch("insert into " + table_indexEnglish + " (id, source, syllabary, pronunciation, definition,"
 			+ " forms, examples, created)"
-			+ "select * from " + "(select :id as id, :source as source, :syllabary as syllabary,"
+			+ " select * from " + "(select :id as id, :source as source, :syllabary as syllabary,"
 			+ " :pronunciation as pronunciation, :definition as definition,"
 			+ " :forms as forms, :examples as examples, NOW() as created) as TMP"
 			+ " where not exists (select 1 from " + table_indexEnglish + " where id=:id AND :id!=0")
@@ -160,7 +160,7 @@ public interface DaoCherokeeDictionary {
 	 */
 	@SqlBatch("insert into " + table_indexSyllabary + " (id, source, syllabary, pronunciation, definition,"
 			+ " forms, examples, created)"
-			+ "select * from " + "(select :id as id, :source as source, :syllabary as syllabary,"
+			+ " select * from " + "(select :id as id, :source as source, :syllabary as syllabary,"
 			+ " :pronunciation as pronunciation, :definition as definition,"
 			+ " :forms as forms, :examples as examples, NOW() as created) as TMP"
 			+ " where not exists (select 1 from " + table_indexSyllabary + " where id=:id AND :id!=0")
@@ -183,7 +183,7 @@ public interface DaoCherokeeDictionary {
 	 */
 	@SqlBatch("insert into " + table_indexLatin + " (id, source, syllabary, pronunciation, definition,"
 			+ " forms, examples, created)"
-			+ "select * from " + "(select :id as id, :source as source, :syllabary as syllabary,"
+			+ " select * from " + "(select :id as id, :source as source, :syllabary as syllabary,"
 			+ " :pronunciation as pronunciation, :definition as definition,"
 			+ " :forms as forms, :examples as examples, NOW() as created) as TMP"
 			+ " where not exists (select 1 from " + table_indexLatin + " where id=:id AND :id!=0")
