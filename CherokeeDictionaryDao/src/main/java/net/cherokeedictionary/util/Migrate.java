@@ -44,6 +44,6 @@ public class Migrate {
 		System.out.println("Updating pre-existing records...");
 		dao.updateDictionaryEntries(newRecords);
 		System.out.println("Adding new records...");
-		dao.addNewDictionaryEntries(newRecords);
+		dao.addNewDictionaryEntriesWithId(newRecords);
 	}
 }
