@@ -244,4 +244,14 @@ public interface DaoCherokeeDictionary {
 			+ " where id=:id and CAST(modified as DATETIME) = CAST(:modified as DATETIME)")
 	@BatchChunkSize(25)
 	public int[] updateIndexMarksById(@BindDictionaryEntry Iterable<DictionaryEntry> forIndexing);
+
+	@SqlQuery("select id from "+table_indexEnglish+" where id in (<ids>)")
+	public List<Integer> existingEnglishIds(@BindIn("ids") List<DictionaryEntry> forIndexing);
+	
+	@SqlQuery("select id from "+table_indexLatin+" where id in (<ids>)")
+	public List<Integer> existingLatinIds(@BindIn("ids") List<DictionaryEntry> forIndexing);
+	
+	@SqlQuery("select id from "+table_indexSyllabary+" where id in (<ids>)")
+	public List<Integer> existingSyllabaryIds(@BindIn("ids") List<DictionaryEntry> forIndexing);
+	
 }
