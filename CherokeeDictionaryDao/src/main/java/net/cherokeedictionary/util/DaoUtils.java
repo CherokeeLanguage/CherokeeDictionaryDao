@@ -12,7 +12,7 @@ public class DaoUtils {
 		json = new JsonConverter();
 	}
 	
-	public static String properPronunciation(String pronunciation) {
+	public static String unicodePronunciation(String pronunciation) {
 		pronunciation=pronunciation.replace("a.", "ạ");
 		pronunciation=pronunciation.replace("e.", "ẹ");
 		pronunciation=pronunciation.replace("i.", "ị");

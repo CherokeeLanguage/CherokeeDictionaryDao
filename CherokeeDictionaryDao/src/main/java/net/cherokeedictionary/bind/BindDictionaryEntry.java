@@ -45,7 +45,7 @@ public @interface BindDictionaryEntry {
 					q.bind("id", record.id);
 					q.bind("source", record.source);
 					q.bind("syllabary", syllabary);
-					q.bind("pronunciation", DaoUtils.properPronunciation(pronunciation));
+					q.bind("pronunciation", DaoUtils.unicodePronunciation(pronunciation));
 					q.bind("definition", definition);
 					q.bind("json", DaoUtils.json.toJson(record));
 				}
