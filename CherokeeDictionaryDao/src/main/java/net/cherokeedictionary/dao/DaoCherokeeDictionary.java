@@ -110,7 +110,7 @@ public interface DaoCherokeeDictionary {
 			+ "select * from " + "(select :id as id, :source as source, :syllabary as syllabary,"
 			+ " :pronunciation as pronunciation, :definition as definition, :json as json, NOW() as created) as TMP"
 			+ " where not exists (select 1 from " + table_entries + " where id=:id AND :id!=0")
-	@BatchChunkSize(100)
+	@BatchChunkSize(25)
 	public int[] addNewDictionaryEntriesWithId(@BindDictionaryEntry Iterable<DictionaryEntry> entries);
 
 	@SqlUpdate("update " + table_entries + " set source=:source, syllabary=:syllabary, pronunciation=:pronunciation,"
@@ -119,11 +119,11 @@ public interface DaoCherokeeDictionary {
 	
 	@SqlBatch("update " + table_entries + " set source=:source, syllabary=:syllabary, pronunciation=:pronunciation,"
 			+ " definition=:definition, json=:json where id=:id")
-	@BatchChunkSize(100)
+	@BatchChunkSize(25)
 	public int[] updateDictionaryEntries(@BindDictionaryEntry Iterable<DictionaryEntry> entries);
 	
 	@SqlBatch("delete from "+table_entries+" where id=:id")
-	@BatchChunkSize(100)
+	@BatchChunkSize(25)
 	public int[] deleteDictionaryEntriesById(@Bind("id")Iterable<Integer>ids);
 	
 	@SqlUpdate("delete from "+table_entries+" where id=:id")
@@ -138,17 +138,17 @@ public interface DaoCherokeeDictionary {
 			+ " :pronunciation as pronunciation, :definition as definition,"
 			+ " :forms as forms, :examples as examples, NOW() as created) as TMP"
 			+ " where not exists (select 1 from " + table_indexEnglish + " where id=:id AND :id!=0")
-	@BatchChunkSize(100)
+	@BatchChunkSize(25)
 	public int[] addNewIndexEnglishEntriesById(@BindEnglishIndex Iterable<DictionaryEntry> entries);
 
 	@SqlBatch("update " + table_indexEnglish + " set source=:source, syllabary=:syllabary, pronunciation=:pronunciation,"
 			+ " definition=:definition, forms=:forms, examples=:examples"
 			+ " where id=:id")
-	@BatchChunkSize(100)
+	@BatchChunkSize(25)
 	public int[] updateIndexEnglishEntriesById(@BindEnglishIndex Iterable<DictionaryEntry> entry);
 	
 	@SqlBatch("delete from "+table_indexEnglish+" where id=:id")
-	@BatchChunkSize(100)
+	@BatchChunkSize(25)
 	public int[] deleteIndexEnglishEntriesById(@Bind("id")Iterable<Integer>ids);
 	
 	/**
@@ -160,17 +160,17 @@ public interface DaoCherokeeDictionary {
 			+ " :pronunciation as pronunciation, :definition as definition,"
 			+ " :forms as forms, :examples as examples, NOW() as created) as TMP"
 			+ " where not exists (select 1 from " + table_indexSyllabary + " where id=:id AND :id!=0")
-	@BatchChunkSize(100)
+	@BatchChunkSize(25)
 	public int[] addNewIndexSyllabaryEntriesById(@BindSyllabaryIndex Iterable<DictionaryEntry> entries);
 
 	@SqlBatch("update " + table_indexSyllabary + " set source=:source, syllabary=:syllabary, pronunciation=:pronunciation,"
 			+ " definition=:definition, forms=:forms, examples=:examples"
 			+ " where id=:id")
-	@BatchChunkSize(100)
+	@BatchChunkSize(25)
 	public int[] updateIndexSyllabaryEntriesById(@BindSyllabaryIndex Iterable<DictionaryEntry> entry);
 	
 	@SqlBatch("delete from "+table_indexSyllabary+" where id=:id")
-	@BatchChunkSize(100)
+	@BatchChunkSize(25)
 	public int[] deleteIndexSyllabaryEntriesById(@Bind("id")Iterable<Integer>ids);
 	
 	/**
@@ -182,17 +182,17 @@ public interface DaoCherokeeDictionary {
 			+ " :pronunciation as pronunciation, :definition as definition,"
 			+ " :forms as forms, :examples as examples, NOW() as created) as TMP"
 			+ " where not exists (select 1 from " + table_indexLatin + " where id=:id AND :id!=0")
-	@BatchChunkSize(100)
+	@BatchChunkSize(25)
 	public int[] addNewIndexLatinEntriesById(@BindLatinIndex Iterable<DictionaryEntry> entries);
 
 	@SqlBatch("update " + table_indexEnglish + " set source=:source, syllabary=:syllabary, pronunciation=:pronunciation,"
 			+ " definition=:definition, forms=:forms, examples=:examples"
 			+ " where id=:id")
-	@BatchChunkSize(100)
+	@BatchChunkSize(25)
 	public int[] updateIndexLatinEntriesById(@BindLatinIndex Iterable<DictionaryEntry> entry);
 	
 	@SqlBatch("delete from "+table_indexEnglish+" where id=:id")
-	@BatchChunkSize(100)
+	@BatchChunkSize(25)
 	public int[] deleteIndexLatinEntriesById(@Bind("id")Iterable<Integer>ids);
 	
 	/**
