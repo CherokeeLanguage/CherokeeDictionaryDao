@@ -22,7 +22,7 @@ public class SimpleIndexer {
 		int sum=0;
 		do {
 			List<DictionaryEntry> forIndexing=dao.needsIndexing(100);
-			if (forIndexing==null) {
+			if (forIndexing==null || forIndexing.size()==0) {
 				break;
 			}
 			Set<Integer> forIndexingIds = new HashSet<>();
