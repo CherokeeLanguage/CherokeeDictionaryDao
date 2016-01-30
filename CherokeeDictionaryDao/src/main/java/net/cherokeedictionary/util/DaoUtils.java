@@ -10,7 +10,6 @@ public class DaoUtils {
 	
 	static {
 		json = new JsonConverter();
-		_chr2translit_init();
 	}
 	
 	public static String properFormedPronunciation(String pronunciation) {
@@ -67,8 +66,10 @@ public class DaoUtils {
 		return sb.toString();
 	}
 	
-	private static final Map<String, String> chr2trans = new HashMap<>();
-	private static void _chr2translit_init() {
+	private static final Map<String, String> chr2trans = _chr2translit_init();
+	private static Map<String, String> _chr2translit_init() {
+		Map<String, String> chr2trans = new HashMap<>();
+		
 		int ix = 0;
 		String letter;
 		String prefix;
@@ -191,5 +192,6 @@ public class DaoUtils {
 			letter = Character.toString((char) (chrStart + ix));
 			chr2trans.put(letter, prefix + vowels[ix]);
 		}
+		return chr2trans;
 	}
 }
