@@ -12,6 +12,7 @@ import org.skife.jdbi.v2.sqlobject.customizers.RegisterMapper;
 
 import net.cherokeedictionary.bind.BindDictionaryEntry;
 import net.cherokeedictionary.bind.BindEnglishIndex;
+import net.cherokeedictionary.bind.BindLatinIndex;
 import net.cherokeedictionary.bind.BindSyllabaryIndex;
 import net.cherokeedictionary.map.MapperLikespreadsheet;
 import net.cherokeedictionary.model.DictionaryEntry;
@@ -182,13 +183,13 @@ public interface DaoCherokeeDictionary {
 			+ " :forms as forms, :examples as examples, NOW() as created) as TMP"
 			+ " where not exists (select 1 from " + table_indexLatin + " where id=:id AND :id!=0")
 	@BatchChunkSize(100)
-	public int[] addNewIndexLatinEntriesById(@Bind Iterable<DictionaryEntry> entries);
+	public int[] addNewIndexLatinEntriesById(@BindLatinIndex Iterable<DictionaryEntry> entries);
 
 	@SqlBatch("update " + table_indexEnglish + " set source=:source, syllabary=:syllabary, pronunciation=:pronunciation,"
 			+ " definition=:definition, forms=:forms, examples=:examples"
 			+ " where id=:id")
 	@BatchChunkSize(100)
-	public int[] updateIndexLatinEntriesById(Iterable<DictionaryEntry> entry);
+	public int[] updateIndexLatinEntriesById(@BindLatinIndex Iterable<DictionaryEntry> entry);
 	
 	@SqlBatch("delete from "+table_indexEnglish+" where id=:id")
 	@BatchChunkSize(100)

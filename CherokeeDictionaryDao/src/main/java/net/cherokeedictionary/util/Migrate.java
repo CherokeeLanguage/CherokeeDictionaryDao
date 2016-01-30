@@ -22,7 +22,7 @@ public class Migrate {
 	public static void main(String[] args) {
 		List<DictionaryEntry> newRecords = new ArrayList<>();
 		List<LikeSpreadsheetsRecord> oldRecords = dao.getLikespreadsheetRecords();
-		System.out.println("Loaded "+oldRecords+" records for migration.");
+		System.out.println("Loaded "+oldRecords.size()+" records for migration.");
 		for (LikeSpreadsheetsRecord old: oldRecords) {
 			DictionaryEntry entry = new DictionaryEntry();
 			entry.id=old.id;
