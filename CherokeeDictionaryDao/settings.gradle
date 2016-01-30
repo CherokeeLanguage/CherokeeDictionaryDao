@@ -1,0 +1,5 @@
+rootProject.name = 'CherokeeDictionaryDao'
+
+/*include ":SHARED-JSON"
+project(":SHARED-JSON").projectDir=new File(settingsDir,"../../SHARED-JSON/SHARED-JSON")
+*/

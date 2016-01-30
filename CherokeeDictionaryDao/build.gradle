@@ -1,0 +1,113 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'eclipse-wtp'
+
+version = '20160129'
+
+buildscript {
+    repositories {
+        maven { url 'http://repo.spring.io/plugins-release' }
+    }
+    dependencies {
+        classpath 'org.springframework.build.gradle:propdeps-plugin:0.0.6'
+    }
+}
+
+
+sourceCompatibility = 1.7
+compileJava.options.encoding = 'UTF-8'
+
+def RTJAR = '/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/rt.jar';
+if (new File(RTJAR).exists()) {
+	compileJava.options.bootClasspath=RTJAR
+}
+
+jar {
+  //from project.sourceSets.main.allSource
+  //from project.sourceSets.main.output
+  from ('src/main/java') {
+  	include 'com/cherokeelessons/dao/model/**/*.java'
+  }
+}
+
+repositories {
+    jcenter()
+	mavenCentral()
+	maven {
+		url "https://github.com/psiegman/mvn-repo/raw/master/releases"
+	}
+}
+
+configurations {
+	provided
+}
+
+dependencies {
+	compile "com.mchange:c3p0:+"
+	compile "mysql:mysql-connector-java:+"
+	compile 'org.jdbi:jdbi:+'
+	compile 'org.antlr:stringtemplate:3.2.1'
+}
+
+eclipseJdt << {
+    File f = file('.settings/org.eclipse.core.resources.prefs')
+    f.write('eclipse.preferences.version=1\n')
+    f.append('encoding/<project>=utf-8')
+    f = file('.settings/org.eclipse.core.runtime.prefs')
+    f.write('eclipse.preferences.version=1\n')
+    f.append('line.separator=\\n\n')
+}
+
+project.afterEvaluate {
+	// use jre lib matching version used by project, not the workspace default
+	if (sourceCompatibility != null) {
+		def target = project.sourceCompatibility.toString()
+		def containerPrefix = "org.eclipse.jdt.launching.JRE_CONTAINER"
+		def containerSuffix
+		if (target =~ /1.[4-5]/) {
+			containerSuffix = '/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-' + target
+		} else if (target =~ /1.[6-8]/) {
+			containerSuffix = '/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-' + target
+		}
+		if (containerSuffix != null) {
+			project.eclipse.classpath {
+				containers.removeAll { it.startsWith(containerPrefix) }
+				containers.add(containerPrefix + containerSuffix)
+			}
+		}
+	}
+}
+
+eclipse {
+	project {
+		name = 'CherokeeDictionaryDao'
+		referencedProjects 'CherokeeDictionaryShared'
+		natures 'org.springsource.ide.eclipse.gradle.core.nature'
+	}
+	
+	classpath {
+		plusConfigurations += [configurations.provided]
+		containers += ['org.springsource.ide.eclipse.gradle.classpathcontainer']
+		downloadSources = true
+		downloadJavadoc = true
+	}
+
+	jdt {
+		sourceCompatibility=1.7
+		targetCompatibility=1.7
+	}
+
+	wtp {
+		facet {
+			facets = []
+			facet name: 'jst.java', version: '1.7'
+			//facet name: 'jst.web', version: '3.0'
+		}
+	}
+
+}
+
+task "create-dirs" << {
+	sourceSets*.java.srcDirs*.each { it.mkdirs() }
+	sourceSets*.resources.srcDirs*.each { it.mkdirs() }
+}
