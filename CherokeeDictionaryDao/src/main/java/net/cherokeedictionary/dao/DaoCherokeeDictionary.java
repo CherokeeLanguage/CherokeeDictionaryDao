@@ -140,7 +140,7 @@ public interface DaoCherokeeDictionary {
 			+ " select * from " + "(select :id as id, :source as source, :syllabary as syllabary,"
 			+ " :pronunciation as pronunciation, :definition as definition,"
 			+ " :forms as forms, :examples as examples, NOW() as created) as TMP"
-			+ " where not exists (select 1 from " + table_indexEnglish + " where id=:id AND :id!=0")
+			+ " where not exists (select 1 from " + table_indexEnglish + " where id=:id AND :id!=0)")
 	@BatchChunkSize(25)
 	@GetGeneratedKeys
 	public int[] addNewIndexEnglishEntriesById(@BindEnglishIndex Iterable<DictionaryEntry> entries);
@@ -163,7 +163,7 @@ public interface DaoCherokeeDictionary {
 			+ " select * from " + "(select :id as id, :source as source, :syllabary as syllabary,"
 			+ " :pronunciation as pronunciation, :definition as definition,"
 			+ " :forms as forms, :examples as examples, NOW() as created) as TMP"
-			+ " where not exists (select 1 from " + table_indexSyllabary + " where id=:id AND :id!=0")
+			+ " where not exists (select 1 from " + table_indexSyllabary + " where id=:id AND :id!=0)")
 	@BatchChunkSize(25)
 	@GetGeneratedKeys
 	public int[] addNewIndexSyllabaryEntriesById(@BindSyllabaryIndex Iterable<DictionaryEntry> entries);
@@ -186,7 +186,7 @@ public interface DaoCherokeeDictionary {
 			+ " select * from " + "(select :id as id, :source as source, :syllabary as syllabary,"
 			+ " :pronunciation as pronunciation, :definition as definition,"
 			+ " :forms as forms, :examples as examples, NOW() as created) as TMP"
-			+ " where not exists (select 1 from " + table_indexLatin + " where id=:id AND :id!=0")
+			+ " where not exists (select 1 from " + table_indexLatin + " where id=:id AND :id!=0)")
 	@BatchChunkSize(25)
 	@GetGeneratedKeys
 	public int[] addNewIndexLatinEntriesById(@BindLatinIndex Iterable<DictionaryEntry> entries);
