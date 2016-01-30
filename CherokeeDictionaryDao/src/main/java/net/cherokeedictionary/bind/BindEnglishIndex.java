@@ -55,10 +55,10 @@ public @interface BindEnglishIndex {
 							if (def==null||def.isEmpty()) {
 								continue;
 							}
-							if (!definition.isEmpty()) {
-								definition+=";";
+							if (sb.length()!=0) {
+								sb.append(";");
 							}
-							definition+=def;
+							sb.append(def);
 						}
 					}
 					q.bind("forms", sb.toString().replaceAll("<.*?>", "").trim());
