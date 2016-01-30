@@ -47,6 +47,7 @@ dependencies {
 	compile "mysql:mysql-connector-java:+"
 	compile 'org.jdbi:jdbi:+'
 	compile 'org.antlr:stringtemplate:3.2.1'
+	compile ':CherokeeDictionaryShared'
 }
 
 eclipseJdt << {

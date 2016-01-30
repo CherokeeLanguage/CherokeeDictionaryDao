@@ -7,7 +7,7 @@ public interface DaoCherokeeDictionary {
 	
 	public String table_entries = "dictionary_entries";
 	public String table_indexSyllabary = "dictionary_index_syllabary";
-	public String table_indexLatin = "dictionary_index_latin";
+	public String table_indexTranslit = "dictionary_index_translit";
 	public String table_indexEnglish = "dictionary_index_english";
 	
 	/**
@@ -54,7 +54,7 @@ public interface DaoCherokeeDictionary {
 			"ROW_FORMAT = DYNAMIC;\n")
 	public void _init_dictionary_indexSyllabary();
 	
-	@SqlUpdate("CREATE TABLE IF NOT EXISTS "+table_indexLatin+" (\n" + 
+	@SqlUpdate("CREATE TABLE IF NOT EXISTS "+table_indexTranslit+" (\n" + 
 			"  `id` BIGINT NOT NULL AUTO_INCREMENT,\n" + 
 			"  `source` VARCHAR(16) NULL,\n" + 
 			"  `syllabary` VARCHAR(254) NULL,\n" + 
@@ -96,7 +96,7 @@ public interface DaoCherokeeDictionary {
 	 *
 	 */
 	public static class Util {
-		public void init() {
+		public static void init() {
 			dao._init_dictionary_indexEnglish();
 			dao._init_dictionary_indexLatin();
 			dao._init_dictionary_indexSyllabary();
