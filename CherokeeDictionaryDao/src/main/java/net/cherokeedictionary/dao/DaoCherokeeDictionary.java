@@ -246,12 +246,12 @@ public interface DaoCherokeeDictionary {
 	public int[] updateIndexMarksById(@BindDictionaryEntry Iterable<DictionaryEntry> forIndexing);
 
 	@SqlQuery("select id from "+table_indexEnglish+" where id in (<ids>)")
-	public List<Integer> existingEnglishIds(@BindIn("ids") List<DictionaryEntry> forIndexing);
+	public List<Integer> existingEnglishIds(@BindIn("ids") Iterable<Integer> forIndexing);
 	
 	@SqlQuery("select id from "+table_indexLatin+" where id in (<ids>)")
-	public List<Integer> existingLatinIds(@BindIn("ids") List<DictionaryEntry> forIndexing);
+	public List<Integer> existingLatinIds(@BindIn("ids") Iterable<Integer> forIndexing);
 	
 	@SqlQuery("select id from "+table_indexSyllabary+" where id in (<ids>)")
-	public List<Integer> existingSyllabaryIds(@BindIn("ids") List<DictionaryEntry> forIndexing);
+	public List<Integer> existingSyllabaryIds(@BindIn("ids") Iterable<Integer> forIndexing);
 	
 }
