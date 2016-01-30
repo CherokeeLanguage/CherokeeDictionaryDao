@@ -20,7 +20,7 @@ public interface DaoCherokeeDictionary {
 
 	public String table_entries = "dictionary_entries";
 	public String table_indexSyllabary = "dictionary_index_syllabary";
-	public String table_indexTranslit = "dictionary_index_translit";
+	public String table_indexLatin = "dictionary_index_latin";
 	public String table_indexEnglish = "dictionary_index_english";
 	public String table_likespreadsheets = "likespreadsheets";
 
@@ -58,7 +58,7 @@ public interface DaoCherokeeDictionary {
 	"PACK_KEYS = 1\n" + "ROW_FORMAT = DYNAMIC;\n")
 	public void _init_dictionary_indexSyllabary();
 
-	@SqlUpdate("CREATE TABLE IF NOT EXISTS " + table_indexTranslit + " (\n" + "  `id` BIGINT NOT NULL AUTO_INCREMENT,\n"
+	@SqlUpdate("CREATE TABLE IF NOT EXISTS " + table_indexLatin + " (\n" + "  `id` BIGINT NOT NULL AUTO_INCREMENT,\n"
 			+ "  `source` VARCHAR(16) NULL,\n" + "  `syllabary` VARCHAR(254) NULL,\n"
 			+ "  `pronunciation` VARCHAR(254) NULL,\n" + "  `definition` VARCHAR(254) NULL,\n"
 			+ "  `forms` LONGTEXT NULL,\n" + "  `examples` LONGTEXT NULL,\n" + "  PRIMARY KEY (`id`),\n"
@@ -114,6 +114,10 @@ public interface DaoCherokeeDictionary {
 			+ " definition=:definition, json=:json where id=:id")
 	public int updateDictionaryEntry(@BindDictionaryEntry DictionaryEntry entry);
 	
+	@SqlBatch("update " + table_entries + " set source=:source, syllabary=:syllabary, pronunciation=:pronunciation,"
+			+ " definition=:definition, json=:json where id=:id")
+	public int[] updateDictionaryEntries(@BindDictionaryEntry Iterable<DictionaryEntry> entries);
+	
 	@SqlBatch("delete from "+table_entries+" where id=:id")
 	public int[] deleteDictionaryEntriesById(@Bind("id")Iterable<Integer>ids);
 	
@@ -161,21 +165,21 @@ public interface DaoCherokeeDictionary {
 	/**
 	 * Add records to indexing table. Prefilled id is mandatory.
 	 */
-	@SqlBatch("insert into " + table_indexTranslit + " (id, source, syllabary, pronunciation, definition,"
+	@SqlBatch("insert into " + table_indexLatin + " (id, source, syllabary, pronunciation, definition,"
 			+ " forms, examples, created)"
 			+ "select * from " + "(select :id as id, :source as source, :syllabary as syllabary,"
 			+ " :pronunciation as pronunciation, :definition as definition,"
 			+ " :forms as forms, :examples as examples, NOW() as created) as TMP"
-			+ " where not exists (select 1 from " + table_indexTranslit + " where id=:id AND :id!=0")
-	public int[] addNewIndexTranslitEntriesById(Iterable<DictionaryEntry> entries);
+			+ " where not exists (select 1 from " + table_indexLatin + " where id=:id AND :id!=0")
+	public int[] addNewIndexLatinEntriesById(Iterable<DictionaryEntry> entries);
 
 	@SqlBatch("update " + table_indexEnglish + " set source=:source, syllabary=:syllabary, pronunciation=:pronunciation,"
 			+ " definition=:definition, forms=:forms, examples=:examples"
 			+ " where id=:id")
-	public int[] updateIndexTranslitEntriesById(Iterable<DictionaryEntry> entry);
+	public int[] updateIndexLatinEntriesById(Iterable<DictionaryEntry> entry);
 	
 	@SqlBatch("delete from "+table_indexEnglish+" where id=:id")
-	public int[] deleteIndexTranslitEntriesById(@Bind("id")Iterable<Integer>ids);
+	public int[] deleteIndexLatinEntriesById(@Bind("id")Iterable<Integer>ids);
 	
 	/**
 	 * Util functions used in lew of Java 8 default methods.

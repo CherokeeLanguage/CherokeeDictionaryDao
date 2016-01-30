@@ -30,7 +30,7 @@ public @interface BindTranslitIndex {
 						syllabary=record.forms.get(0).syllabary;
 						pronunciation=record.forms.get(0).pronunciation;
 						if (pronunciation==null||pronunciation.isEmpty()) {
-							pronunciation=record.forms.get(0).translit;
+							pronunciation=record.forms.get(0).latin;
 						}
 					}
 					if (record.definitions!=null) {
@@ -49,7 +49,7 @@ public @interface BindTranslitIndex {
 					StringBuilder sb = new StringBuilder();
 					if (record.forms!=null) {
 						for (EntryForm form: record.forms) {
-							sb.append(form.translit);
+							sb.append(form.latin);
 							sb.append("\n");
 						}
 					}
@@ -57,7 +57,7 @@ public @interface BindTranslitIndex {
 					sb.setLength(0);
 					if (record.examples!=null) {
 						for (EntryExample example: record.examples) {
-							sb.append(example.translit);
+							sb.append(example.latin);
 							sb.append("\n");
 						}
 					}

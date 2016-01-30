@@ -29,7 +29,7 @@ public @interface BindDictionaryEntry {
 						syllabary=record.forms.get(0).syllabary;
 						pronunciation=record.forms.get(0).pronunciation;
 						if (pronunciation==null||pronunciation.isEmpty()) {
-							pronunciation=record.forms.get(0).translit;
+							pronunciation=record.forms.get(0).latin;
 						}
 					}
 					if (record.definitions!=null) {
