@@ -57,8 +57,10 @@ public @interface BindEnglishIndex {
 					sb.setLength(0);
 					if (record.examples!=null) {
 						for (EntryExample example: record.examples) {
-							sb.append(example.english);
-							sb.append("\n");
+							if (example.english!=null) {
+								sb.append(example.english);
+								sb.append("\n");
+							}
 						}
 					}
 					q.bind("examples", sb.toString());

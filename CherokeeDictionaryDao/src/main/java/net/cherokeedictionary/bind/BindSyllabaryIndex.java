@@ -50,16 +50,20 @@ public @interface BindSyllabaryIndex {
 					StringBuilder sb = new StringBuilder();
 					if (record.forms!=null) {
 						for (EntryForm form: record.forms) {
-							sb.append(form.syllabary);
-							sb.append("\n");
+							if (form.syllabary!=null) {
+								sb.append(form.syllabary);
+								sb.append("\n");
+							}
 						}
 					}
 					q.bind("forms", sb.toString());
 					sb.setLength(0);
 					if (record.examples!=null) {
 						for (EntryExample example: record.examples) {
-							sb.append(example.syllabary);
-							sb.append("\n");
+							if (example.syllabary!=null) {
+								sb.append(example.syllabary);
+								sb.append("\n");
+							}
 						}
 					}
 					q.bind("examples", sb.toString());
