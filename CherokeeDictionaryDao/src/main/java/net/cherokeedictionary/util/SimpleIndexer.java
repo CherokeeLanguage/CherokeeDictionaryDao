@@ -26,15 +26,15 @@ public class SimpleIndexer {
 			System.out.println("Indexing "+size+" records.");
 			
 			System.out.println("\tAdded "+DaoUtils.getInsertCount(dao.addNewIndexLatinEntriesById(forIndexing))+" Latin/Translit records.");
-			System.out.println("\tUpdated "+DaoUtils.getInsertCount(dao.updateIndexLatinEntriesById(forIndexing))+" Latin/Translit records.");
+			System.out.println("\tUpdated "+DaoUtils.getUpdateCount(dao.updateIndexLatinEntriesById(forIndexing))+" Latin/Translit records.");
 			
 			System.out.println("\tAdded "+DaoUtils.getInsertCount(dao.addNewIndexSyllabaryEntriesById(forIndexing))+" Syllabary records.");
-			System.out.println("\tUpdated "+DaoUtils.getInsertCount(dao.updateIndexSyllabaryEntriesById(forIndexing))+" Syllabary records.");
+			System.out.println("\tUpdated "+DaoUtils.getUpdateCount(dao.updateIndexSyllabaryEntriesById(forIndexing))+" Syllabary records.");
 			
 			System.out.println("\tAdded "+DaoUtils.getInsertCount(dao.addNewIndexEnglishEntriesById(forIndexing))+" English records.");
-			System.out.println("\tUpdated "+DaoUtils.getInsertCount(dao.updateIndexEnglishEntriesById(forIndexing))+" English records.");
+			System.out.println("\tUpdated "+DaoUtils.getUpdateCount(dao.updateIndexEnglishEntriesById(forIndexing))+" English records.");
 			
-			System.out.println("\t\tIndex marked "+dao.updateIndexMarksById(forIndexing)+" records.");
+			System.out.println("\t\tIndex marked "+DaoUtils.getUpdateCount(dao.updateIndexMarksById(forIndexing))+" records.");
 			System.out.println();
 		} while (size!=0);
 		System.out.println("No more records need indexing.");
