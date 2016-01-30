@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.skife.jdbi.v2.DBI;
 import org.skife.jdbi.v2.sqlobject.Bind;
+import org.skife.jdbi.v2.sqlobject.GetGeneratedKeys;
 import org.skife.jdbi.v2.sqlobject.SqlBatch;
 import org.skife.jdbi.v2.sqlobject.SqlQuery;
 import org.skife.jdbi.v2.sqlobject.SqlUpdate;
@@ -98,6 +99,7 @@ public interface DaoCherokeeDictionary {
 	 */
 	@SqlBatch("insert into " + table_entries + " (source, syllabary, pronunciation, definition, json, created)"
 			+ "values" + "(:source, :syllabary, :pronunciation, :definition, :json, NOW())")
+	@GetGeneratedKeys
 	public int[] addNewDictionaryEntries(@BindDictionaryEntry Iterable<DictionaryEntry> entries);
 
 	/**
@@ -111,6 +113,7 @@ public interface DaoCherokeeDictionary {
 			+ " :pronunciation as pronunciation, :definition as definition, :json as json, NOW() as created) as TMP"
 			+ " where not exists (select 1 from " + table_entries + " where id=:id AND :id!=0")
 	@BatchChunkSize(25)
+	@GetGeneratedKeys
 	public int[] addNewDictionaryEntriesWithId(@BindDictionaryEntry Iterable<DictionaryEntry> entries);
 
 	@SqlUpdate("update " + table_entries + " set source=:source, syllabary=:syllabary, pronunciation=:pronunciation,"
@@ -139,6 +142,7 @@ public interface DaoCherokeeDictionary {
 			+ " :forms as forms, :examples as examples, NOW() as created) as TMP"
 			+ " where not exists (select 1 from " + table_indexEnglish + " where id=:id AND :id!=0")
 	@BatchChunkSize(25)
+	@GetGeneratedKeys
 	public int[] addNewIndexEnglishEntriesById(@BindEnglishIndex Iterable<DictionaryEntry> entries);
 
 	@SqlBatch("update " + table_indexEnglish + " set source=:source, syllabary=:syllabary, pronunciation=:pronunciation,"
@@ -161,6 +165,7 @@ public interface DaoCherokeeDictionary {
 			+ " :forms as forms, :examples as examples, NOW() as created) as TMP"
 			+ " where not exists (select 1 from " + table_indexSyllabary + " where id=:id AND :id!=0")
 	@BatchChunkSize(25)
+	@GetGeneratedKeys
 	public int[] addNewIndexSyllabaryEntriesById(@BindSyllabaryIndex Iterable<DictionaryEntry> entries);
 
 	@SqlBatch("update " + table_indexSyllabary + " set source=:source, syllabary=:syllabary, pronunciation=:pronunciation,"
@@ -183,6 +188,7 @@ public interface DaoCherokeeDictionary {
 			+ " :forms as forms, :examples as examples, NOW() as created) as TMP"
 			+ " where not exists (select 1 from " + table_indexLatin + " where id=:id AND :id!=0")
 	@BatchChunkSize(25)
+	@GetGeneratedKeys
 	public int[] addNewIndexLatinEntriesById(@BindLatinIndex Iterable<DictionaryEntry> entries);
 
 	@SqlBatch("update " + table_indexEnglish + " set source=:source, syllabary=:syllabary, pronunciation=:pronunciation,"
