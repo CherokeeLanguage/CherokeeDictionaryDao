@@ -34,7 +34,7 @@ public class Migrate {
 			entry.forms.add(new EntryForm(EntryFormType.Verb3rdPast,old.vthirdpastsyllj, old.vthirdpasttone, old.vthirdpasti));
 			entry.forms.add(new EntryForm(EntryFormType.Verb3rdHab,old.vthirdpressylll, old.vthirdprestone, old.vthirdpresk));
 			entry.forms.add(new EntryForm(EntryFormType.Verb2ndImp,old.vsecondimpersylln, old.vsecondimpertone, old.vsecondimperm));
-			entry.forms.add(new EntryForm(EntryFormType.Verb3rdInf,old.vthirdinfsyllp, old.vthirdinftone, old.vthirdinfsyllp));
+			entry.forms.add(new EntryForm(EntryFormType.Verb3rdInf,old.vthirdinfsyllp, old.vthirdinftone, old.vthirdinfo));
 			entry.forms.add(new EntryForm(EntryFormType.Other,old.nounadjpluralsyllf, old.nounadjpluraltone, old.nounadjplurale));
 			entry.notes.add(new Note(old.notes));
 			entry.pos=old.partofspeechc;
