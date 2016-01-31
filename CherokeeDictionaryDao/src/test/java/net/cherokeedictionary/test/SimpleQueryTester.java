@@ -21,7 +21,7 @@ public class SimpleQueryTester {
 		List<Integer> ids;
 		String[] testQueries = { "ᏩᎭᏯ ᏥᏍᏚ", "\"Ꮎ ᎠᏂᏧᏣ\"", "+Ꮎ +ᎠᏂᏧᏣ", "-Ꮎ +ᎠᏂᏧᏣ", "Ꮎ ᎠᏂᏧᏣ", "Wahaya Jisdu",
 				"Wahaya Tsisdu", "\"Na anichuja\"", "\"Na anitsutsa\"", "Wolf Rabbit", "\"The boys\"", "-the +boys",
-				"dog", "dogs", "dog*", "ᎠᏓᎾᏩᏍᏗᎭ", "tsala*" };
+				"dog", "dogs", "dog*", "ᎠᏓᎾᏩᏍᏗᎭ", "tsala*", "ᏣᎳ*" };
 
 		for (SearchIndex index : SearchIndex.values()) {
 			System.out.println("Searching index " + index.name() + " [" + index.getTable() + "]");
