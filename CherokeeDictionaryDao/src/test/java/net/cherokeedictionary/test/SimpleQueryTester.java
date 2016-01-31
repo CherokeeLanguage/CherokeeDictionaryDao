@@ -4,8 +4,11 @@ import java.util.List;
 
 import net.cherokeedictionary.dao.DaoCherokeeDictionary;
 import net.cherokeedictionary.model.DictionaryEntry;
+import net.cherokeedictionary.model.DictionaryEntry.EntryExample;
+import net.cherokeedictionary.model.DictionaryEntry.EntryForm;
 import net.cherokeedictionary.model.SearchField;
 import net.cherokeedictionary.model.SearchIndex;
+import net.cherokeedictionary.util.DaoUtils;
 
 public class SimpleQueryTester {
 	private static final DaoCherokeeDictionary dao = DaoCherokeeDictionary.dao;
@@ -18,7 +21,7 @@ public class SimpleQueryTester {
 		List<Integer> ids;
 		String[] testQueries = { "ᏩᎭᏯ ᏥᏍᏚ", "\"Ꮎ ᎠᏂᏧᏣ\"", "+Ꮎ +ᎠᏂᏧᏣ", "-Ꮎ +ᎠᏂᏧᏣ", "Ꮎ ᎠᏂᏧᏣ", "Wahaya Jisdu",
 				"Wahaya Tsisdu", "\"Na anichuja\"", "\"Na anitsutsa\"", "Wolf Rabbit", "\"The boys\"", "-the +boys",
-				"dog", "dogs", "dog*", "ᎠᏓᎾᏩᏍᏗᎭ" };
+				"dog", "dogs", "dog*", "ᎠᏓᎾᏩᏍᏗᎭ", "tsala*" };
 
 		for (SearchIndex index : SearchIndex.values()) {
 			System.out.println("Searching index " + index.name() + " [" + index.getTable() + "]");
@@ -31,14 +34,33 @@ public class SimpleQueryTester {
 				System.out.println("\t" + query + ", " + ids.size() + " results.");
 				List<DictionaryEntry> entries = dao.entriesById(ids);
 				for (DictionaryEntry entry : entries) {
-					System.out.println("\t\t" + entry.forms.get(0).syllabary + " [" + entry.forms.get(0).pronunciation
-							+ "] " + entry.definitions.get(0) + " [" + entry.id + "]");
-					if (entry.examples.size()>0) {
-						System.out.println("\t\t\t" + entry.examples.get(0).english);
+					EntryForm entryForm = entry.forms.get(0);
+					System.out.println("\t\t" + entryForm.syllabary + " ["
+							+ DaoUtils.unicodePronunciation(entryForm.pronunciation) + "] "
+							+ entry.definitions.get(0) + " [" + entry.id + "]");
+					if (entry.examples.size() > 0) {
+						EntryExample entryExample = entry.examples.get(0);
+						if (entryExample != null) {
+							if (!isBlank(entryExample.syllabary)) {
+								System.out.println("\t\t\t" + entryExample.syllabary);
+							}
+							if (!isBlank(entryExample.latin)) {
+								System.out.println("\t\t\t" + entryExample.latin);
+							}
+							if (!isBlank(entryExample.english)) {
+								System.out.println("\t\t\t" + entryExample.english);
+							}
+						}
 					}
 				}
 			}
 		}
+	}
+	public static boolean isBlank(String txt) {
+		if (txt==null) {
+			return true;
+		}
+		return txt.replaceAll("\\s+", "").isEmpty();
 	}
 }
 

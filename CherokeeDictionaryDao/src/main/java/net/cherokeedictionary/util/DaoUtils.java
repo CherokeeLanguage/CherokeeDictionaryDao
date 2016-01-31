@@ -31,6 +31,9 @@ public class DaoUtils {
 	}
 	
 	public static String unicodePronunciation(String pronunciation) {
+		if (pronunciation==null) {
+			return null;
+		}
 		pronunciation=pronunciation.replace("a.", "ạ");
 		pronunciation=pronunciation.replace("e.", "ẹ");
 		pronunciation=pronunciation.replace("i.", "ị");
