@@ -28,10 +28,10 @@ public class SimpleQueryTester {
 			for (String query : testQueries) {
 				ids = dao.search(index, SearchField.All, query);
 				if (ids.size() == 0) {
-					System.out.println("\trlike '" + query + "' - no results.");
+					System.out.println("\twhere concat("+SearchField.All.getFields()+") rlike '" + query + "' - no results.");
 					continue;
 				}
-				System.out.println("\trlike '" + query + "', " + ids.size() + " results.");
+				System.out.println("\twhere concat("+SearchField.All.getFields()+") rlike '" + query + "', " + ids.size() + " results.");
 				List<DictionaryEntry> entries = dao.entriesById(ids);
 				for (DictionaryEntry entry : entries) {
 					EntryForm entryForm = entry.forms.get(0);
