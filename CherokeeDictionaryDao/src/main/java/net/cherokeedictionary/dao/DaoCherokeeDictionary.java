@@ -41,70 +41,84 @@ public interface DaoCherokeeDictionary {
 	 */
 	public static final DaoCherokeeDictionary dao = new DBI(new Db()).onDemand(DaoCherokeeDictionary.class);
 
-	@SqlUpdate("CREATE TABLE IF NOT EXISTS " + table_entries + " (\n" + "  `id` BIGINT NOT NULL AUTO_INCREMENT,\n"
-			+ "  `source` VARCHAR(16) NULL,\n" + "  `syllabary` VARCHAR(254) NULL,\n"
-			+ "  `pronunciation` VARCHAR(254) NULL,\n" + "  `definition` VARCHAR(254) NULL,\n"
-			+ "  `json` LONGTEXT NULL,\n" + "  `created` DATETIME NULL,\n" + "  `indexed` DATETIME NULL,\n"
-			+ "  `modified` TIMESTAMP NULL DEFAULT current_timestamp on update current_timestamp,\n"
-			+ "  PRIMARY KEY (`id`),\n" + "  INDEX `source` (`source` ASC),\n" + "  INDEX `created` (`created` ASC),\n"
-			+ "  INDEX `indexed` (`indexed` ASC),\n" + "  INDEX `modified` (`modified` ASC))\n" + "ENGINE = InnoDB\n"
-			+ "DEFAULT CHARACTER SET = utf8\n" + // utf8mb4 is not available for
-													// mysql 5.0.x
-	"PACK_KEYS = 1\n" + "ROW_FORMAT = COMPRESSED;\n")
+	@SqlUpdate("CREATE TABLE IF NOT EXISTS " + table_entries + " (\n" //
+			+ "  `id` BIGINT NOT NULL AUTO_INCREMENT,\n" //
+			+ "  `source` VARCHAR(16) NULL,\n" //
+			+ "  `syllabary` VARCHAR(254) NULL,\n" //
+			+ "  `pronunciation` VARCHAR(254) NULL,\n" //
+			+ "  `definition` VARCHAR(254) NULL,\n" //
+			+ "  `json` LONGTEXT NULL,\n" //
+			+ "  `created` DATETIME NULL,\n" //
+			+ "  `indexed` DATETIME NULL,\n" //
+			+ "  `modified` TIMESTAMP NULL DEFAULT current_timestamp on update current_timestamp,\n" //
+			+ "  PRIMARY KEY (`id`),\n" //
+			+ "  INDEX `source` (`source` ASC),\n" // 
+			+ "  INDEX `created` (`created` ASC),\n" //
+			+ "  INDEX `indexed` (`indexed` ASC),\n" //
+			+ "  INDEX `modified` (`modified` ASC))\n" //
+			+ "ENGINE = InnoDB\n" //
+			+ "DEFAULT CHARACTER SET = utf8\n" // utf8mb4 not available
+			+ "PACK_KEYS = 1\n" //
+			+ "ROW_FORMAT = COMPRESSED;\n")
 	public void _initDictionaryTable();
 
-	@SqlUpdate("CREATE TABLE IF NOT EXISTS " + table_indexSyllabary + " (\n"
-			+ "  `id` bigint(20) NOT NULL auto_increment,\n" + "  `source` varchar(16) default NULL,\n"
-			+ "  `syllabary` varchar(254) default NULL,\n" + "  `pronunciation` varchar(254) default NULL,\n"
-			+ "  `definition` varchar(254) default NULL,\n" + "  `forms` longtext,\n" + "  `examples` longtext,\n"
-			+ "  `created` datetime default NULL,\n"
-			+ "  `modified` timestamp NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,\n"
-			+ "  PRIMARY KEY  (`id`),\n" + "  KEY `source` (`source`),\n" + "  FULLTEXT KEY `forms` (`forms`),\n"
-			+ "  FULLTEXT KEY `examples` (`examples`),\n" + "  FULLTEXT KEY `formsexamples` (`forms`,`examples`)\n"
-			+ ") ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 PACK_KEYS=1 ROW_FORMAT=DYNAMIC;\n"
-	// utf8mb4
-	// is
-	// not
-	// available
-	// for
-	// mysql
-	// 5.0.x
+	@SqlUpdate("CREATE TABLE IF NOT EXISTS " + table_indexSyllabary //
+			+ " (\n" //
+			+ "  `id` bigint(20) NOT NULL auto_increment,\n" //
+			+ "  `source` varchar(16) default NULL,\n" //
+			+ "  `syllabary` varchar(254) default NULL,\n" //
+			+ "  `pronunciation` varchar(254) default NULL,\n" //
+			+ "  `definition` varchar(254) default NULL,\n" //
+			+ "  `forms` longtext,\n" //
+			+ "  `examples` longtext,\n" //
+			+ "  `created` datetime default NULL,\n" //
+			+ "  `modified` timestamp NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,\n" //
+			+ "  PRIMARY KEY  (`id`),\n" //
+			+ "  KEY `source` (`source`),\n" //
+			+ "  KEY `forms` (`forms`(384)),\n" //
+			+ "  KEY `examples` (`examples`(384)),\n" //
+			+ ") ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8" // utf8mb4 not available
+			+ " PACK_KEYS = 1 ROW_FORMAT=COMPRESSED;\n" //
 	)
 	public void _init_dictionary_indexSyllabary();
 
-	@SqlUpdate("CREATE TABLE IF NOT EXISTS " + table_indexLatin + " (\n"
-			+ "  `id` bigint(20) NOT NULL auto_increment,\n" + "  `source` varchar(16) default NULL,\n"
-			+ "  `syllabary` varchar(254) default NULL,\n" + "  `pronunciation` varchar(254) default NULL,\n"
-			+ "  `definition` varchar(254) default NULL,\n" + "  `forms` longtext,\n" + "  `examples` longtext,\n"
-			+ "  `created` datetime default NULL,\n"
-			+ "  `modified` timestamp NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,\n"
-			+ "  PRIMARY KEY  (`id`),\n" + "  KEY `source` (`source`),\n" + "  FULLTEXT KEY `forms` (`forms`),\n"
-			+ "  FULLTEXT KEY `examples` (`examples`),\n" + "  FULLTEXT KEY `formsexamples` (`forms`,`examples`)\n"
-			+ ") ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 PACK_KEYS=1 ROW_FORMAT=DYNAMIC;\n" // utf8mb4
-	// is
-	// not
-	// available
-	// for
-	// mysql
-	// 5.0.x
+	@SqlUpdate("CREATE TABLE IF NOT EXISTS " + table_indexLatin //
+			+ " (\n" //
+			+ "  `id` bigint(20) NOT NULL auto_increment,\n" //
+			+ "  `source` varchar(16) default NULL,\n" //
+			+ "  `syllabary` varchar(254) default NULL,\n" //
+			+ "  `pronunciation` varchar(254) default NULL,\n" //
+			+ "  `definition` varchar(254) default NULL,\n" //
+			+ "  `forms` longtext,\n" //
+			+ "  `examples` longtext,\n" //
+			+ "  `created` datetime default NULL,\n" //
+			+ "  `modified` timestamp NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,\n" //
+			+ "  PRIMARY KEY  (`id`),\n" //
+			+ "  KEY `source` (`source`),\n" //
+			+ "  KEY `forms` (`forms`(384)),\n" //
+			+ "  KEY `examples` (`examples`(384)),\n" //
+			+ ") ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8" // utf8mb4 not available
+			+ " PACK_KEYS = 1 ROW_FORMAT=COMPRESSED;\n" //
 	)
 	public void _init_dictionary_indexLatin();
 
-	@SqlUpdate("CREATE TABLE IF NOT EXISTS " + table_indexEnglish + " (\n"
-			+ "  `id` bigint(20) NOT NULL auto_increment,\n" + "  `source` varchar(16) default NULL,\n"
-			+ "  `syllabary` varchar(254) default NULL,\n" + "  `pronunciation` varchar(254) default NULL,\n"
-			+ "  `definition` varchar(254) default NULL,\n" + "  `forms` longtext,\n" + "  `examples` longtext,\n"
-			+ "  `created` datetime default NULL,\n"
-			+ "  `modified` timestamp NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,\n"
-			+ "  PRIMARY KEY  (`id`),\n" + "  KEY `source` (`source`),\n" + "  FULLTEXT KEY `forms` (`forms`),\n"
-			+ "  FULLTEXT KEY `examples` (`examples`),\n" + "  FULLTEXT KEY `formsexamples` (`forms`,`examples`)\n"
-			+ ") ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 PACK_KEYS=1 ROW_FORMAT=DYNAMIC;\n" // utf8mb4
-	// is
-	// not
-	// available
-	// for
-	// mysql
-	// 5.0.x
+	@SqlUpdate("CREATE TABLE IF NOT EXISTS " + table_indexEnglish //
+			+ " (\n" //
+			+ "  `id` bigint(20) NOT NULL auto_increment,\n" //
+			+ "  `source` varchar(16) default NULL,\n" //
+			+ "  `syllabary` varchar(254) default NULL,\n" //
+			+ "  `pronunciation` varchar(254) default NULL,\n" //
+			+ "  `definition` varchar(254) default NULL,\n" //
+			+ "  `forms` longtext,\n" //
+			+ "  `examples` longtext,\n" //
+			+ "  `created` datetime default NULL,\n" //
+			+ "  `modified` timestamp NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,\n" //
+			+ "  PRIMARY KEY  (`id`),\n" //
+			+ "  KEY `source` (`source`),\n" //
+			+ "  KEY `forms` (`forms`(384)),\n" //
+			+ "  KEY `examples` (`examples`(384)),\n" //
+			+ ") ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8" // utf8mb4 not available
+			+ " PACK_KEYS = 1 ROW_FORMAT=COMPRESSED;\n" //
 	)
 	public void _init_dictionary_indexEnglish();
 
