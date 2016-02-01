@@ -76,7 +76,7 @@ public interface DaoCherokeeDictionary {
 			+ "  PRIMARY KEY  (`id`),\n" //
 			+ "  KEY `source` (`source`),\n" //
 			+ "  KEY `forms` (`forms`(384)),\n" //
-			+ "  KEY `examples` (`examples`(384)),\n" //
+			+ "  KEY `examples` (`examples`(384))\n" //
 			+ ") ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8" // utf8mb4 not available
 			+ " PACK_KEYS = 1 ROW_FORMAT=COMPRESSED;\n" //
 	)
@@ -96,7 +96,7 @@ public interface DaoCherokeeDictionary {
 			+ "  PRIMARY KEY  (`id`),\n" //
 			+ "  KEY `source` (`source`),\n" //
 			+ "  KEY `forms` (`forms`(384)),\n" //
-			+ "  KEY `examples` (`examples`(384)),\n" //
+			+ "  KEY `examples` (`examples`(384))\n" //
 			+ ") ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8" // utf8mb4 not available
 			+ " PACK_KEYS = 1 ROW_FORMAT=COMPRESSED;\n" //
 	)
@@ -116,7 +116,7 @@ public interface DaoCherokeeDictionary {
 			+ "  PRIMARY KEY  (`id`),\n" //
 			+ "  KEY `source` (`source`),\n" //
 			+ "  KEY `forms` (`forms`(384)),\n" //
-			+ "  KEY `examples` (`examples`(384)),\n" //
+			+ "  KEY `examples` (`examples`(384))\n" //
 			+ ") ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8" // utf8mb4 not available
 			+ " PACK_KEYS = 1 ROW_FORMAT=COMPRESSED;\n" //
 	)
