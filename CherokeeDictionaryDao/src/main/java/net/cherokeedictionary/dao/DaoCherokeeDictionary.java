@@ -287,6 +287,12 @@ public interface DaoCherokeeDictionary {
 
 	@SqlQuery("SELECT id FROM <_search_index_>" + " WHERE MATCH (<_search_field_>)"
 			+ " AGAINST (:query IN BOOLEAN MODE);")
+	public List<Integer> searchFT(@DefineSearchIndex SearchIndex index, @DefineSearchField SearchField field,
+			@Bind("query") String query);
+	
+	@SqlQuery("SELECT id FROM <_search_index_>" //
+			+ " WHERE CONCAT(<_search_field_>) rlike " //
+			+ " :query")
 	public List<Integer> search(@DefineSearchIndex SearchIndex index, @DefineSearchField SearchField field,
 			@Bind("query") String query);
 }

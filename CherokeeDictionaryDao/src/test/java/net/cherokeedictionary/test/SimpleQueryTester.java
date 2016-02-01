@@ -19,9 +19,9 @@ public class SimpleQueryTester {
 
 	public static void main(String[] args) {
 		List<Integer> ids;
-		String[] testQueries = { "ᏩᎭᏯ ᏥᏍᏚ", "\"Ꮎ ᎠᏂᏧᏣ\"", "+Ꮎ +ᎠᏂᏧᏣ", "-Ꮎ +ᎠᏂᏧᏣ", "Ꮎ ᎠᏂᏧᏣ", "Wahaya Jisdu",
-				"Wahaya Tsisdu", "\"Na anichuja\"", "\"Na anitsutsa\"", "Wolf Rabbit", "\"The boys\"", "-the +boys",
-				"dog", "dogs", "dog*", "ᎠᏓᎾᏩᏍᏗᎭ", "tsala*", "ᏣᎳ*" };
+		String[] testQueries = { "(ᏩᎭᏯ|ᏥᏍᏚ)", "Ꮎ ᎠᏂᏧᏣ", "(Wahaya|Jisdu)",
+				"(Wahaya|Tsisdu)", "Na anichuja", "Na anitsutsa", "(Wolf|Rabbit)",
+				"The boys", "dog", "dogs", "ᎠᏓᎾᏩᏍᏗᎭ", "tsa[a-zA-Z]+gi", "ᏣᎳ" };
 
 		for (SearchIndex index : SearchIndex.values()) {
 			System.out.println("Searching index " + index.name() + " [" + index.getTable() + "]");
