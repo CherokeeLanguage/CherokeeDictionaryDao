@@ -295,4 +295,8 @@ public interface DaoCherokeeDictionary {
 			+ " :query")
 	public List<Integer> search(@DefineSearchIndex SearchIndex index, @DefineSearchField SearchField field,
 			@Bind("query") String query);
+
+	@SqlQuery("select id, json, modified from " + table_entries + " where source=:source")
+	@RegisterMapper(MapperDictionaryEntry.class)
+	public List<DictionaryEntry> getRecordsForSource(@Bind("source")String string);
 }
