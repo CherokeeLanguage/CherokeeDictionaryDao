@@ -19,11 +19,17 @@ public class SimpleQueryTester {
 
 	public static void main(String[] args) {
 		List<Integer> ids;
-		String[] testQueries = { "(ᏩᎭᏯ|ᏥᏍᏚ)", "Ꮎ ᎠᏂᏧᏣ", "(Wahaya|Jisdu)",
+		String[] testQueries = {".*ᎾᏕ[[:>:]]",};//"[[:<:]]ᎬᏂ[[:>:]]"};// { ".*(Ꭵ|Ꭼ|Ꮂ|Ꮈ|Ꮕ|Ꮢ|Ꮫ|Ꮲ|Ꮸ|Ꮾ|Ᏼ)ᏂᏗ.*" };
+		/*
+		 * , "(ᏩᎭᏯ|ᏥᏍᏚ)", "Ꮎ ᎠᏂᏧᏣ", "(Wahaya|Jisdu)",
 				"(Wahaya|Tsisdu)", "Na anichuja", "Na anitsutsa", "(Wolf|Rabbit)",
 				"The boys", "dog", "dogs", "ᎠᏓᎾᏩᏍᏗᎭ", "tsa[a-zA-Z]+gi", "ᏣᎳ" };
+		 */
 
 		for (SearchIndex index : SearchIndex.values()) {
+//			if (!SearchIndex.Syllabary.equals(index)){
+//				continue;
+//			}
 			System.out.println("Searching index " + index.name() + " [" + index.getTable() + "]");
 			for (String query : testQueries) {
 				ids = dao.search(index, SearchField.All, query);
