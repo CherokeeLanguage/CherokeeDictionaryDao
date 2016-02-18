@@ -337,7 +337,7 @@ public interface DaoCherokeeDictionary {
 					ientry.remove();
 					continue;
 				}
-				if (isBlank(entry.syllabaryb))
+				if (isBlank(entry.syllabaryb) && isBlank(entry.entrytone))
 					ientry.remove();
 				continue;
 			}
