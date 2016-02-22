@@ -333,7 +333,11 @@ public interface DaoCherokeeDictionary {
 					ientry.remove();
 					continue;
 				}
-				if (entry.definitiond.contains("see Gram")) {
+				if (entry.definitiond.contains("(see Gram")) {
+					ientry.remove();
+					continue;
+				}
+				if (entry.definitiond.startsWith("see ")) {
 					ientry.remove();
 					continue;
 				}
