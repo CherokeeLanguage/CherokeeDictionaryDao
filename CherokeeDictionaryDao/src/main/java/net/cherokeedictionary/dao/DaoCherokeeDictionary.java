@@ -1,5 +1,6 @@
 package net.cherokeedictionary.dao;
 
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -10,6 +11,7 @@ import org.skife.jdbi.v2.sqlobject.SqlBatch;
 import org.skife.jdbi.v2.sqlobject.SqlQuery;
 import org.skife.jdbi.v2.sqlobject.SqlUpdate;
 import org.skife.jdbi.v2.sqlobject.customizers.BatchChunkSize;
+import org.skife.jdbi.v2.sqlobject.customizers.Define;
 import org.skife.jdbi.v2.sqlobject.customizers.RegisterMapper;
 import org.skife.jdbi.v2.sqlobject.stringtemplate.UseStringTemplate3StatementLocator;
 import org.skife.jdbi.v2.unstable.BindIn;
@@ -29,13 +31,13 @@ import net.cherokeedictionary.model.SearchIndex;
 import net.cherokeedictionary.util.DaoUtils;
 
 @UseStringTemplate3StatementLocator
-public interface DaoCherokeeDictionary {
+public abstract class DaoCherokeeDictionary {
 
-	public String table_entries = "dictionary_entries";
-	public String table_indexSyllabary = SearchIndex.Table.tableSyllabary;
-	public String table_indexLatin = SearchIndex.Table.tableLatin;
-	public String table_indexEnglish = SearchIndex.Table.tableEnglish;
-	public String table_likespreadsheets = "likespreadsheets";
+	public static final String table_entries = "dictionary_entries";
+	public static final String table_indexSyllabary = SearchIndex.Table.tableSyllabary;
+	public static final String table_indexLatin = SearchIndex.Table.tableLatin;
+	public static final String table_indexEnglish = SearchIndex.Table.tableEnglish;
+	public static final String table_likespreadsheets = "likespreadsheets";
 
 	/**
 	 * automatic connection/disconnect from database via the connection pool as
@@ -62,7 +64,7 @@ public interface DaoCherokeeDictionary {
 			+ "DEFAULT CHARACTER SET = utf8\n" // utf8mb4 not available
 			+ "PACK_KEYS = 1\n" //
 			+ "ROW_FORMAT = COMPRESSED;\n")
-	public void _initDictionaryTable();
+	public abstract void _initDictionaryTable();
 
 	@SqlUpdate("CREATE TABLE IF NOT EXISTS " + table_indexSyllabary //
 			+ " (\n" //
@@ -84,7 +86,7 @@ public interface DaoCherokeeDictionary {
 																		// available
 			+ " PACK_KEYS = 1 ROW_FORMAT=COMPRESSED;\n" //
 	)
-	public void _init_dictionary_indexSyllabary();
+	public abstract void _init_dictionary_indexSyllabary();
 
 	@SqlUpdate("CREATE TABLE IF NOT EXISTS " + table_indexLatin //
 			+ " (\n" //
@@ -106,7 +108,7 @@ public interface DaoCherokeeDictionary {
 																		// available
 			+ " PACK_KEYS = 1 ROW_FORMAT=COMPRESSED;\n" //
 	)
-	public void _init_dictionary_indexLatin();
+	public abstract void _init_dictionary_indexLatin();
 
 	@SqlUpdate("CREATE TABLE IF NOT EXISTS " + table_indexEnglish //
 			+ " (\n" //
@@ -128,22 +130,39 @@ public interface DaoCherokeeDictionary {
 																		// available
 			+ " PACK_KEYS = 1 ROW_FORMAT=COMPRESSED;\n" //
 	)
-	public void _init_dictionary_indexEnglish();
+	public abstract void _init_dictionary_indexEnglish();
 
 	@SqlQuery("select min(id) from " + table_likespreadsheets)
-	public int minIdLikespreadsheet();
+	public abstract int minIdLikespreadsheet();
 
 	@SqlQuery("select max(id) from " + table_likespreadsheets)
-	public int maxIdLikespreadsheet();
+	public abstract int maxIdLikespreadsheet();
 
 	@SqlQuery("select * from " + table_likespreadsheets)
 	@RegisterMapper(MapperLikespreadsheet.class)
-	public List<LikeSpreadsheetsRecord> getLikespreadsheetRecords();
+	public abstract List<LikeSpreadsheetsRecord> getLikespreadsheetRecords();
 
 	@SqlQuery("select * from " + table_likespreadsheets + " where source=:source")
 	@RegisterMapper(MapperLikespreadsheet.class)
-	public List<LikeSpreadsheetsRecord> getLikespreadsheetRecords(@Bind("source") String source);
-
+	public abstract List<LikeSpreadsheetsRecord> getLikespreadsheetRecords(@Bind("source") String source);
+	
+	@SqlBatch("update "+table_likespreadsheets //
+			+" set" //
+			+ " sentencesyllr=:sentencesyllr," //
+			+ " sentenceq=:sentenceq," //
+			+ " sentenceenglishs=:sentenceenglishs," //
+			+ " sentencetranslit=:sentencetranslit" //
+			+ " where id=:id" //
+			+ " AND modified=:modified" //
+			+ " AND (" //
+			+ "    sentencesyllr != :sentencesyllr" //
+			+ "    OR sentenceq != :sentenceq" //
+			+ "    OR sentenceenglishs != :sentenceenglishs" //
+			+ "    OR sentencetranslit != :sentencetranslit" //
+			+ " )")
+	@BatchChunkSize(10)
+	public abstract int[] updateLikespreadsheetSentences(@BindLikespreadsheetsRecord Iterable<LikeSpreadsheetsRecord> records);
+	
 	/**
 	 * Adds new records. Records are NOT uniqued.
 	 * 
@@ -153,7 +172,7 @@ public interface DaoCherokeeDictionary {
 	@SqlBatch("insert into " + table_entries + " (source, syllabary, pronunciation, definition, json, created)"
 			+ " values " + "(:source, :syllabary, :pronunciation, :definition, :json, NOW())")
 	@GetGeneratedKeys
-	public int[] addNewDictionaryEntries(@BindDictionaryEntry Iterable<DictionaryEntry> entries);
+	public abstract int[] addNewDictionaryEntries(@BindDictionaryEntry Iterable<DictionaryEntry> entries);
 
 	/**
 	 * Adds new records. Records are uniqued by id.
@@ -167,23 +186,23 @@ public interface DaoCherokeeDictionary {
 			+ " where not exists (select 1 from " + table_entries + " where id=:id AND :id!=0)")
 	@BatchChunkSize(25)
 	@GetGeneratedKeys
-	public int[] addNewDictionaryEntriesWithId(@BindDictionaryEntry Iterable<DictionaryEntry> entries);
+	public abstract int[] addNewDictionaryEntriesWithId(@BindDictionaryEntry Iterable<DictionaryEntry> entries);
 
 	@SqlUpdate("update " + table_entries + " set source=:source, syllabary=:syllabary, pronunciation=:pronunciation,"
 			+ " definition=:definition, json=:json where id=:id")
-	public int updateDictionaryEntry(@BindDictionaryEntry DictionaryEntry entry);
+	public abstract int updateDictionaryEntry(@BindDictionaryEntry DictionaryEntry entry);
 
 	@SqlBatch("update " + table_entries + " set source=:source, syllabary=:syllabary, pronunciation=:pronunciation,"
 			+ " definition=:definition, json=:json where id=:id")
 	@BatchChunkSize(25)
-	public int[] updateDictionaryEntries(@BindDictionaryEntry Iterable<DictionaryEntry> entries);
+	public abstract int[] updateDictionaryEntries(@BindDictionaryEntry Iterable<DictionaryEntry> entries);
 
 	@SqlBatch("delete from " + table_entries + " where id=:id")
 	@BatchChunkSize(25)
-	public int[] deleteDictionaryEntriesById(@Bind("id") Iterable<Integer> ids);
+	public abstract int[] deleteDictionaryEntriesById(@Bind("id") Iterable<Integer> ids);
 
 	@SqlUpdate("delete from " + table_entries + " where id=:id")
-	public int deleteDictionaryEntryById(@Bind("id") int id);
+	public abstract int deleteDictionaryEntryById(@Bind("id") int id);
 
 	/**
 	 * Add records to indexing table. Prefilled id is mandatory.
@@ -196,17 +215,17 @@ public interface DaoCherokeeDictionary {
 			+ table_indexEnglish + " where id=:id AND :id!=0)")
 	@BatchChunkSize(25)
 	@GetGeneratedKeys
-	public int[] addNewIndexEnglishEntriesById(@BindEnglishIndex Iterable<DictionaryEntry> entries);
+	public abstract int[] addNewIndexEnglishEntriesById(@BindEnglishIndex Iterable<DictionaryEntry> entries);
 
 	@SqlBatch("update " + table_indexEnglish
 			+ " set source=:source, syllabary=:syllabary, pronunciation=:pronunciation,"
 			+ " definition=:definition, forms=:forms, examples=:examples" + " where id=:id")
 	@BatchChunkSize(25)
-	public int[] updateIndexEnglishEntriesById(@BindEnglishIndex Iterable<DictionaryEntry> entry);
+	public abstract int[] updateIndexEnglishEntriesById(@BindEnglishIndex Iterable<DictionaryEntry> entry);
 
 	@SqlBatch("delete from " + table_indexEnglish + " where id=:id")
 	@BatchChunkSize(25)
-	public int[] deleteIndexEnglishEntriesById(@Bind("id") Iterable<Integer> ids);
+	public abstract int[] deleteIndexEnglishEntriesById(@Bind("id") Iterable<Integer> ids);
 
 	/**
 	 * Add records to indexing table. Prefilled id is mandatory.
@@ -219,17 +238,17 @@ public interface DaoCherokeeDictionary {
 			+ table_indexSyllabary + " where id=:id AND :id!=0)")
 	@BatchChunkSize(25)
 	@GetGeneratedKeys
-	public int[] addNewIndexSyllabaryEntriesById(@BindSyllabaryIndex Iterable<DictionaryEntry> entries);
+	public abstract int[] addNewIndexSyllabaryEntriesById(@BindSyllabaryIndex Iterable<DictionaryEntry> entries);
 
 	@SqlBatch("update " + table_indexSyllabary
 			+ " set source=:source, syllabary=:syllabary, pronunciation=:pronunciation,"
 			+ " definition=:definition, forms=:forms, examples=:examples" + " where id=:id")
 	@BatchChunkSize(25)
-	public int[] updateIndexSyllabaryEntriesById(@BindSyllabaryIndex Iterable<DictionaryEntry> entry);
+	public abstract int[] updateIndexSyllabaryEntriesById(@BindSyllabaryIndex Iterable<DictionaryEntry> entry);
 
 	@SqlBatch("delete from " + table_indexSyllabary + " where id=:id")
 	@BatchChunkSize(25)
-	public int[] deleteIndexSyllabaryEntriesById(@Bind("id") Iterable<Integer> ids);
+	public abstract int[] deleteIndexSyllabaryEntriesById(@Bind("id") Iterable<Integer> ids);
 
 	/**
 	 * Add records to indexing table. Prefilled id is mandatory.
@@ -242,25 +261,25 @@ public interface DaoCherokeeDictionary {
 			+ table_indexLatin + " where id=:id AND :id!=0)")
 	@BatchChunkSize(25)
 	@GetGeneratedKeys
-	public int[] addNewIndexLatinEntriesById(@BindLatinIndex Iterable<DictionaryEntry> entries);
+	public abstract int[] addNewIndexLatinEntriesById(@BindLatinIndex Iterable<DictionaryEntry> entries);
 
 	@SqlBatch("update " + table_indexLatin + " set source=:source, syllabary=:syllabary, pronunciation=:pronunciation,"
 			+ " definition=:definition, forms=:forms, examples=:examples" + " where id=:id")
 	@BatchChunkSize(25)
-	public int[] updateIndexLatinEntriesById(@BindLatinIndex Iterable<DictionaryEntry> entry);
+	public abstract int[] updateIndexLatinEntriesById(@BindLatinIndex Iterable<DictionaryEntry> entry);
 
 	@SqlBatch("delete from " + table_indexLatin + " where id=:id")
 	@BatchChunkSize(25)
-	public int[] deleteIndexLatinEntriesById(@Bind("id") Iterable<Integer> ids);
+	public abstract int[] deleteIndexLatinEntriesById(@Bind("id") Iterable<Integer> ids);
 
 	@SqlQuery("select id, source, json, modified from " + table_entries
 			+ " where indexed is null OR indexed = 0 OR modified>=indexed limit :limit")
 	@RegisterMapper(MapperDictionaryEntry.class)
-	public List<DictionaryEntry> needsIndexing(@Bind("limit") int limit);
+	public abstract List<DictionaryEntry> needsIndexing(@Bind("limit") int limit);
 
 	@SqlQuery("select id, json, modified from " + table_entries + " where id in (<ids>)")
 	@RegisterMapper(MapperDictionaryEntry.class)
-	public List<DictionaryEntry> entriesById(@BindIn("ids") Iterable<Integer> ids);
+	public abstract List<DictionaryEntry> entriesById(@BindIn("ids") Iterable<Integer> ids);
 
 	/**
 	 * update indexed without updating modified and verifying to do the update
@@ -271,31 +290,31 @@ public interface DaoCherokeeDictionary {
 	@SqlBatch("update " + table_entries + " set indexed=now(), modified=modified"
 			+ " where id=:id and CAST(modified as DATETIME) = CAST(:modified as DATETIME)")
 	@BatchChunkSize(25)
-	public int[] updateIndexMarksById(@BindDictionaryEntry Iterable<DictionaryEntry> forIndexing);
+	public abstract int[] updateIndexMarksById(@BindDictionaryEntry Iterable<DictionaryEntry> forIndexing);
 
 	@SqlQuery("select id from " + table_indexEnglish + " where id in (<ids>)")
-	public List<Integer> existingEnglishIds(@BindIn("ids") Iterable<Integer> forIndexing);
+	public abstract List<Integer> existingEnglishIds(@BindIn("ids") Iterable<Integer> forIndexing);
 
 	@SqlQuery("select id from " + table_indexLatin + " where id in (<ids>)")
-	public List<Integer> existingLatinIds(@BindIn("ids") Iterable<Integer> forIndexing);
+	public abstract List<Integer> existingLatinIds(@BindIn("ids") Iterable<Integer> forIndexing);
 
 	@SqlQuery("select id from " + table_indexSyllabary + " where id in (<ids>)")
-	public List<Integer> existingSyllabaryIds(@BindIn("ids") Iterable<Integer> forIndexing);
+	public abstract List<Integer> existingSyllabaryIds(@BindIn("ids") Iterable<Integer> forIndexing);
 
 	@SqlQuery("SELECT id FROM <_search_index_>" + " WHERE MATCH (<_search_field_>)"
 			+ " AGAINST (:query IN BOOLEAN MODE);")
-	public List<Integer> searchFT(@DefineSearchIndex SearchIndex index, @DefineSearchField SearchField field,
+	public abstract List<Integer> searchFT(@DefineSearchIndex SearchIndex index, @DefineSearchField SearchField field,
 			@Bind("query") String query);
 
 	@SqlQuery("SELECT id FROM <_search_index_>" //
 			+ " WHERE CONCAT(<_search_field_>) rlike " //
 			+ " :query")
-	public List<Integer> search(@DefineSearchIndex SearchIndex index, @DefineSearchField SearchField field,
+	public abstract List<Integer> search(@DefineSearchIndex SearchIndex index, @DefineSearchField SearchField field,
 			@Bind("query") String query);
 
 	@SqlQuery("select id, json, modified from " + table_entries + " where source=:source")
 	@RegisterMapper(MapperDictionaryEntry.class)
-	public List<DictionaryEntry> getRecordsForSource(@Bind("source") String string);
+	public abstract List<DictionaryEntry> getRecordsForSource(@Bind("source") String string);
 
 	/**
 	 * Util functions used in lew of Java 8 default methods.
@@ -454,4 +473,17 @@ public interface DaoCherokeeDictionary {
 			}
 		}
 	}
+
+	public void backupLikeSpreadsheets() {
+		Date stamp = new Date();
+		_createBackupTableLikeSpreadsheets(table_likespreadsheets+"_"+stamp.getTime());
+		_insertIntoBackupTableLikeSpreadsheets(table_likespreadsheets+"_"+stamp.getTime());
+	}
+
+	@SqlUpdate("create table <table> like "+table_likespreadsheets)
+	public abstract void _createBackupTableLikeSpreadsheets(@Define("table") String table);
+	
+	@SqlUpdate("insert into <table> select * from "+table_likespreadsheets)
+	public abstract void _insertIntoBackupTableLikeSpreadsheets(@Define("table") String table);
+
 }
