@@ -322,157 +322,6 @@ public abstract class DaoCherokeeDictionary {
 	 * @author mjoyner
 	 *
 	 */
-	public static class Util {
-		public static void init() {
-			dao._init_dictionary_indexEnglish();
-			dao._init_dictionary_indexLatin();
-			dao._init_dictionary_indexSyllabary();
-			dao._initDictionaryTable();
-		}
-
-		/**
-		 * We don't want "empty", "word parts", or
-		 * "Cross references to the not-included Grammar"
-		 * 
-		 * @param entries
-		 */
-		public static void removeUnwantedEntries(List<LikeSpreadsheetsRecord> entries) {
-			Iterator<LikeSpreadsheetsRecord> ientry = entries.iterator();
-			while (ientry.hasNext()) {
-				LikeSpreadsheetsRecord entry = ientry.next();
-				if (entry.syllabaryb.contains("-")) {
-					ientry.remove();
-					continue;
-				}
-				if (entry.entrya.startsWith("-")) {
-					ientry.remove();
-					continue;
-				}
-				if (entry.entrya.endsWith("-")) {
-					ientry.remove();
-					continue;
-				}
-				if (entry.definitiond.contains("(see Gram")) {
-					ientry.remove();
-					continue;
-				}
-				if (entry.definitiond.startsWith("see ")) {
-					ientry.remove();
-					continue;
-				}
-				if (isBlank(entry.syllabaryb) && isBlank(entry.entrytone))
-					ientry.remove();
-				continue;
-			}
-		}
-
-		public static void removeEntriesWithBogusDefinitions(List<LikeSpreadsheetsRecord> entries) {
-			Iterator<LikeSpreadsheetsRecord> ientry = entries.iterator();
-			while (ientry.hasNext()) {
-				LikeSpreadsheetsRecord entry = ientry.next();
-				if (entry.definitiond.startsWith("(see")) {
-					ientry.remove();
-					continue;
-				}
-				if (isBlank(entry.definitiond)) {
-					ientry.remove();
-					continue;
-				}
-			}
-		}
-
-		public static boolean isBlank(String text) {
-			return (text == null) || (text.trim().isEmpty());
-		}
-
-		public static String defaultString(String text) {
-			return text == null ? "" : text;
-		}
-
-		public static String defaultString(String text, String _default) {
-			return text == null ? "" : _default;
-		}
-
-		public static void removeEntriesWithMissingPronunciations(List<LikeSpreadsheetsRecord> entries) {
-			Iterator<LikeSpreadsheetsRecord> ientry = entries.iterator();
-			while (ientry.hasNext()) {
-				LikeSpreadsheetsRecord entry = ientry.next();
-				if (isBlank(entry.entrytone)) {
-					ientry.remove();
-					continue;
-				}
-				if (isBlank(entry.nounadjpluraltone.replace("-", "")) != isBlank(
-						entry.nounadjpluralsyllf.replace("-", ""))) {
-					System.err.println("nounadjpl: "+DaoUtils.json.toJson(entry));
-					ientry.remove();
-					continue;
-				}
-				if (isBlank(entry.vfirstprestone.replace("-", "")) != isBlank(entry.vfirstpresh.replace("-", ""))) {
-					System.err.println("vfirstpres: "+DaoUtils.json.toJson(entry));
-					ientry.remove();
-					continue;
-				}
-				if (isBlank(entry.vsecondimpertone.replace("-", "")) != isBlank(
-						entry.vsecondimpersylln.replace("-", ""))) {
-					System.err.println("vsecondimper: "+DaoUtils.json.toJson(entry));
-					ientry.remove();
-					continue;
-				}
-				if (isBlank(entry.vthirdpasttone.replace("-", "")) != isBlank(entry.vthirdpastsyllj.replace("-", ""))) {
-					System.err.println("vthirdpast: "+DaoUtils.json.toJson(entry));
-					ientry.remove();
-					continue;
-				}
-				if (isBlank(entry.vthirdprestone.replace("-", "")) != isBlank(entry.vthirdpressylll.replace("-", ""))) {
-					System.err.println("vthirdpres: "+DaoUtils.json.toJson(entry));
-					ientry.remove();
-					continue;
-				}
-			}
-		}
-
-		public static void removeEntriesWithInvalidSyllabary(List<LikeSpreadsheetsRecord> entries) {
-			Iterator<LikeSpreadsheetsRecord> ientry = entries.iterator();
-			while (ientry.hasNext()) {
-				LikeSpreadsheetsRecord entry = ientry.next();
-				entry.syllabaryb = defaultString(entry.syllabaryb);
-				if (!isBlank(entry.syllabaryb.replaceAll("[Ꭰ-Ᏼ\\s,\\-]", ""))) {
-					ientry.remove();
-					continue;
-				}
-				entry.nounadjpluralsyllf = defaultString(entry.nounadjpluralsyllf);
-				if (!isBlank(entry.nounadjpluralsyllf.replaceAll("[Ꭰ-Ᏼ\\s,\\-]", ""))) {
-					ientry.remove();
-					continue;
-				}
-				entry.vfirstpresh = defaultString(entry.vfirstpresh);
-				if (!isBlank(entry.vfirstpresh.replaceAll("[Ꭰ-Ᏼ\\s,\\-]", ""))) {
-					ientry.remove();
-					continue;
-				}
-				entry.vsecondimpersylln = defaultString(entry.vsecondimpersylln);
-				if (!isBlank(entry.vsecondimpersylln.replaceAll("[Ꭰ-Ᏼ\\s,\\-]", ""))) {
-					ientry.remove();
-					continue;
-				}
-				entry.vthirdinfsyllp = defaultString(entry.vthirdinfsyllp);
-				if (!isBlank(entry.vthirdinfsyllp.replaceAll("[Ꭰ-Ᏼ\\s,\\-]", ""))) {
-					ientry.remove();
-					continue;
-				}
-				entry.vthirdpastsyllj = defaultString(entry.vthirdpastsyllj);
-				if (!isBlank(entry.vthirdpastsyllj.replaceAll("[Ꭰ-Ᏼ\\s,\\-]", ""))) {
-					ientry.remove();
-					continue;
-				}
-				entry.vthirdpressylll = defaultString(entry.vthirdpressylll);
-				if (!isBlank(entry.vthirdpressylll.replaceAll("[Ꭰ-Ᏼ\\s,\\-]", ""))) {
-					ientry.remove();
-					continue;
-				}
-			}
-		}
-	}
 
 	public void backupLikeSpreadsheets() {
 		Date stamp = new Date();
@@ -485,5 +334,155 @@ public abstract class DaoCherokeeDictionary {
 	
 	@SqlUpdate("insert into <table> select * from "+table_likespreadsheets)
 	public abstract void _insertIntoBackupTableLikeSpreadsheets(@Define("table") String table);
+
+	public static void removeEntriesWithInvalidSyllabary(List<LikeSpreadsheetsRecord> entries) {
+		Iterator<LikeSpreadsheetsRecord> ientry = entries.iterator();
+		while (ientry.hasNext()) {
+			LikeSpreadsheetsRecord entry = ientry.next();
+			entry.syllabaryb = defaultString(entry.syllabaryb);
+			if (!isBlank(entry.syllabaryb.replaceAll("[Ꭰ-Ᏼ\\s,\\-]", ""))) {
+				ientry.remove();
+				continue;
+			}
+			entry.nounadjpluralsyllf = defaultString(entry.nounadjpluralsyllf);
+			if (!isBlank(entry.nounadjpluralsyllf.replaceAll("[Ꭰ-Ᏼ\\s,\\-]", ""))) {
+				ientry.remove();
+				continue;
+			}
+			entry.vfirstpresh = defaultString(entry.vfirstpresh);
+			if (!isBlank(entry.vfirstpresh.replaceAll("[Ꭰ-Ᏼ\\s,\\-]", ""))) {
+				ientry.remove();
+				continue;
+			}
+			entry.vsecondimpersylln = defaultString(entry.vsecondimpersylln);
+			if (!isBlank(entry.vsecondimpersylln.replaceAll("[Ꭰ-Ᏼ\\s,\\-]", ""))) {
+				ientry.remove();
+				continue;
+			}
+			entry.vthirdinfsyllp = defaultString(entry.vthirdinfsyllp);
+			if (!isBlank(entry.vthirdinfsyllp.replaceAll("[Ꭰ-Ᏼ\\s,\\-]", ""))) {
+				ientry.remove();
+				continue;
+			}
+			entry.vthirdpastsyllj = defaultString(entry.vthirdpastsyllj);
+			if (!isBlank(entry.vthirdpastsyllj.replaceAll("[Ꭰ-Ᏼ\\s,\\-]", ""))) {
+				ientry.remove();
+				continue;
+			}
+			entry.vthirdpressylll = defaultString(entry.vthirdpressylll);
+			if (!isBlank(entry.vthirdpressylll.replaceAll("[Ꭰ-Ᏼ\\s,\\-]", ""))) {
+				ientry.remove();
+				continue;
+			}
+		}
+	}
+
+	public static void removeEntriesWithMissingPronunciations(List<LikeSpreadsheetsRecord> entries) {
+		Iterator<LikeSpreadsheetsRecord> ientry = entries.iterator();
+		while (ientry.hasNext()) {
+			LikeSpreadsheetsRecord entry = ientry.next();
+			if (isBlank(entry.entrytone)) {
+				ientry.remove();
+				continue;
+			}
+			if (isBlank(entry.nounadjpluraltone.replace("-", "")) != isBlank(
+					entry.nounadjpluralsyllf.replace("-", ""))) {
+				System.err.println("nounadjpl: "+DaoUtils.json.toJson(entry));
+				ientry.remove();
+				continue;
+			}
+			if (isBlank(entry.vfirstprestone.replace("-", "")) != isBlank(entry.vfirstpresh.replace("-", ""))) {
+				System.err.println("vfirstpres: "+DaoUtils.json.toJson(entry));
+				ientry.remove();
+				continue;
+			}
+			if (isBlank(entry.vsecondimpertone.replace("-", "")) != isBlank(
+					entry.vsecondimpersylln.replace("-", ""))) {
+				System.err.println("vsecondimper: "+DaoUtils.json.toJson(entry));
+				ientry.remove();
+				continue;
+			}
+			if (isBlank(entry.vthirdpasttone.replace("-", "")) != isBlank(entry.vthirdpastsyllj.replace("-", ""))) {
+				System.err.println("vthirdpast: "+DaoUtils.json.toJson(entry));
+				ientry.remove();
+				continue;
+			}
+			if (isBlank(entry.vthirdprestone.replace("-", "")) != isBlank(entry.vthirdpressylll.replace("-", ""))) {
+				System.err.println("vthirdpres: "+DaoUtils.json.toJson(entry));
+				ientry.remove();
+				continue;
+			}
+		}
+	}
+
+	public static String defaultString(String text, String _default) {
+		return text == null ? "" : _default;
+	}
+
+	public static String defaultString(String text) {
+		return text == null ? "" : text;
+	}
+
+	public static boolean isBlank(String text) {
+		return (text == null) || (text.trim().isEmpty());
+	}
+
+	public static void removeEntriesWithBogusDefinitions(List<LikeSpreadsheetsRecord> entries) {
+		Iterator<LikeSpreadsheetsRecord> ientry = entries.iterator();
+		while (ientry.hasNext()) {
+			LikeSpreadsheetsRecord entry = ientry.next();
+			if (entry.definitiond.startsWith("(see")) {
+				ientry.remove();
+				continue;
+			}
+			if (DaoCherokeeDictionary.isBlank(entry.definitiond)) {
+				ientry.remove();
+				continue;
+			}
+		}
+	}
+
+	/**
+	 * We don't want "empty", "word parts", or
+	 * "Cross references to the not-included Grammar"
+	 * 
+	 * @param entries
+	 */
+	public static void removeUnwantedEntries(List<LikeSpreadsheetsRecord> entries) {
+		Iterator<LikeSpreadsheetsRecord> ientry = entries.iterator();
+		while (ientry.hasNext()) {
+			LikeSpreadsheetsRecord entry = ientry.next();
+			if (entry.syllabaryb.contains("-")) {
+				ientry.remove();
+				continue;
+			}
+			if (entry.entrya.startsWith("-")) {
+				ientry.remove();
+				continue;
+			}
+			if (entry.entrya.endsWith("-")) {
+				ientry.remove();
+				continue;
+			}
+			if (entry.definitiond.contains("(see Gram")) {
+				ientry.remove();
+				continue;
+			}
+			if (entry.definitiond.startsWith("see ")) {
+				ientry.remove();
+				continue;
+			}
+			if (DaoCherokeeDictionary.isBlank(entry.syllabaryb) && DaoCherokeeDictionary.isBlank(entry.entrytone))
+				ientry.remove();
+			continue;
+		}
+	}
+
+	public static void init() {
+		dao._init_dictionary_indexEnglish();
+		dao._init_dictionary_indexLatin();
+		dao._init_dictionary_indexSyllabary();
+		dao._initDictionaryTable();
+	}
 
 }

@@ -16,7 +16,7 @@ public class Migrate {
 	
 	private static final DaoCherokeeDictionary dao = DaoCherokeeDictionary.dao;
 	static {
-		DaoCherokeeDictionary.Util.init();
+		DaoCherokeeDictionary.init();
 	}
 	
 	public static void main(String[] args) {
