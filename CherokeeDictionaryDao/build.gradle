@@ -48,6 +48,7 @@ dependencies {
 	compile 'org.jdbi:jdbi:2.72'
 	compile 'org.antlr:stringtemplate:3.2.1'
 	compile "com.fasterxml.jackson.core:jackson-databind:2.7.0"
+	//compile "com.fasterxml.jackson.core:jackson-annotations:2.7.0"
 	compile project(':CherokeeDictionaryShared')
 }
 
