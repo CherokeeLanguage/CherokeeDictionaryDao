@@ -43,9 +43,9 @@ configurations {
 }
 
 dependencies {
-	compile "com.mchange:c3p0:+"
-	compile "mysql:mysql-connector-java:+"
-	compile 'org.jdbi:jdbi:+'
+	compile "com.mchange:c3p0:0.9.5.2"
+	compile "mysql:mysql-connector-java:5.1.38"
+	compile 'org.jdbi:jdbi:2.72'
 	compile 'org.antlr:stringtemplate:3.2.1'
 	compile "com.fasterxml.jackson.core:jackson-databind:2.7.0"
 	compile project(':CherokeeDictionaryShared')
