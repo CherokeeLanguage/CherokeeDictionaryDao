@@ -14,16 +14,10 @@ import org.skife.jdbi.v2.tweak.ConnectionFactory;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import com.mchange.v2.c3p0.ConnectionCustomizer;
 import com.mchange.v2.log.MLevel;
-import com.mysql.jdbc.AbandonedConnectionCleanupThread;
 
 public class Db implements ConnectionFactory, ConnectionCustomizer {
 
 	public static void destroy() {
-		try {
-			AbandonedConnectionCleanupThread.shutdown();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
 		ComboPooledDataSource tmp = pool;
 		pool=null;
 		try {
