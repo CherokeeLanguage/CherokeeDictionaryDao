@@ -85,7 +85,7 @@ eclipse {
 	project {
 		name = 'CherokeeDictionaryDao'
 		referencedProjects 'CherokeeDictionaryShared'
-		natures 'org.springsource.ide.eclipse.gradle.core.nature'
+		natures 'org.eclipse.buildship.core.gradleprojectnature'
 	}
 	
 	classpath {
