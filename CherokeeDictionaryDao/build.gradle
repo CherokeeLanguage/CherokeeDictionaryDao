@@ -4,18 +4,7 @@ apply plugin: 'eclipse-wtp'
 apply plugin: 'maven'
 
 group "com.github.michael-joyner"
-
-version = '20160731'
-
-buildscript {
-    //repositories {
-    //    maven { url 'http://repo.spring.io/plugins-release' }
-    //}
-    //dependencies {
-    //    classpath 'org.springframework.build.gradle:propdeps-plugin:0.0.6'
-    //}
-}
-
+version = '20160801'
 
 sourceCompatibility = 1.7
 compileJava.options.encoding = 'UTF-8'
@@ -24,14 +13,6 @@ def RTJAR = '/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/rt.jar';
 if (new File(RTJAR).exists()) {
 	compileJava.options.bootClasspath=RTJAR
 }
-
-//jar {
-  //from project.sourceSets.main.allSource
-  //from project.sourceSets.main.output
-  //from ('src/main/java') {
-  //	include 'com/cherokeelessons/dao/model/**/*.java'
-  //}
-//}
 
 repositories {
     jcenter()
@@ -52,6 +33,26 @@ dependencies {
 	compile "com.fasterxml.jackson.core:jackson-annotations:2.8.1"
 	
 	compile 'com.github.michael-joyner:CherokeeDictionaryShared:-SNAPSHOT'
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+	javadoc.failOnError=false
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
+
+configurations.all {
+    resolutionStrategy.cacheChangingModulesFor 30, 'seconds'
 }
 
 eclipseJdt << {
