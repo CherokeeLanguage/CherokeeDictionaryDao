@@ -42,10 +42,11 @@ configurations {
 dependencies {
 	compile "com.mchange:c3p0:0.9.5.2"
 	compile "org.mariadb.jdbc:mariadb-java-client:1.4.+"
-	compile 'org.jdbi:jdbi:2.72'
+	compile 'org.jdbi:jdbi:2.73'
 	compile 'org.antlr:stringtemplate:3.2.1'
+	compile "com.fasterxml.jackson.core:jackson-core:2.8.1"
 	compile "com.fasterxml.jackson.core:jackson-databind:2.8.1"
-	//compile "com.fasterxml.jackson.core:jackson-annotations:2.7.0"
+	compile "com.fasterxml.jackson.core:jackson-annotations:2.8.1"
 	
 	compile 'com.github.michael-joyner:CherokeeDictionaryShared:-SNAPSHOT'
 }
