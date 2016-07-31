@@ -1,6 +1,9 @@
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'eclipse-wtp'
+apply plugin: 'maven'
+
+group "com.github.michael-joyner"
 
 version = '20160731'
 
