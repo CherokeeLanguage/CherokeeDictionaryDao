@@ -25,13 +25,13 @@ if (new File(RTJAR).exists()) {
 	compileJava.options.bootClasspath=RTJAR
 }
 
-jar {
+//jar {
   //from project.sourceSets.main.allSource
   //from project.sourceSets.main.output
   //from ('src/main/java') {
   //	include 'com/cherokeelessons/dao/model/**/*.java'
   //}
-}
+//}
 
 repositories {
     jcenter()
