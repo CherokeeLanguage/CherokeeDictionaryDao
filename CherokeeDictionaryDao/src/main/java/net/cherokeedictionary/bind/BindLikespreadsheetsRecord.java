@@ -1,4 +1,4 @@
-package net.cherokeedictionary.dao;
+package net.cherokeedictionary.bind;
 
 import java.lang.annotation.Annotation;
 import java.lang.annotation.ElementType;

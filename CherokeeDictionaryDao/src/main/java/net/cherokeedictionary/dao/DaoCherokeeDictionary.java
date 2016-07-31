@@ -19,6 +19,7 @@ import org.skife.jdbi.v2.unstable.BindIn;
 import net.cherokeedictionary.bind.BindDictionaryEntry;
 import net.cherokeedictionary.bind.BindEnglishIndex;
 import net.cherokeedictionary.bind.BindLatinIndex;
+import net.cherokeedictionary.bind.BindLikespreadsheetsRecord;
 import net.cherokeedictionary.bind.BindSyllabaryIndex;
 import net.cherokeedictionary.bind.DefineSearchField;
 import net.cherokeedictionary.bind.DefineSearchIndex;
