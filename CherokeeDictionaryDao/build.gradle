@@ -3,7 +3,7 @@ apply plugin: 'eclipse'
 apply plugin: 'eclipse-wtp'
 apply plugin: 'maven'
 
-group "com.github.michael-joyner"
+group "com.github.CherokeeLanguage"
 version = '20160801'
 
 sourceCompatibility = 1.7
@@ -32,7 +32,7 @@ dependencies {
 	compile "com.fasterxml.jackson.core:jackson-databind:2.8.1"
 	compile "com.fasterxml.jackson.core:jackson-annotations:2.8.1"
 	
-	compile 'com.github.michael-joyner:CherokeeDictionaryShared:-SNAPSHOT'
+	compile 'com.github.CherokeeLanguage:CherokeeDictionaryShared:-SNAPSHOT'
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {
