@@ -10,7 +10,7 @@ repositories {
   maven { url "https://jitpack.io" }
 }
 dependencies {
-  compile 'com.github.michael-joyner:CherokeeDictionaryDao:20160731'
+  compile 'com.github.CherokeeLanguage:CherokeeDictionaryDao:20160731'
 }
 
 ```
