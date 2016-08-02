@@ -1,7 +1,7 @@
 # CherokeeDictionaryDao
 Cherokee Dictionary Project DAO via JDBI
 
-Available via jitpack.io: https://jitpack.io/#michael-joyner/CherokeeDictionaryDao
+Available via jitpack.io: https://jitpack.io/#CherokeeLanguage/CherokeeDictionaryDao
 
 Gradle:
 ```
