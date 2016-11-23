@@ -41,9 +41,15 @@ public class Migrate {
 			entry.source=old.source;
 			newRecords.add(entry);
 		}
-		for (int ix=0; ix<newRecords.size(); ix+=100) {
+		int percent=-1;
+		int size = newRecords.size();
+		for (int ix=0; ix<size; ix+=100) {
+			if (percent!=(100*ix)/size){
+				percent=(100*ix)/size;
+				System.out.println("\t\t"+percent+"%");
+			}
 			int s=ix;
-			int e=Math.min(ix+100, newRecords.size());
+			int e=Math.min(ix+100, size);
 			System.out.println("\tUpdating pre-existing records...");
 			dao.updateDictionaryEntries(newRecords.subList(s, e));
 			System.out.println("\tAdding new records...");
