@@ -24,8 +24,8 @@ configurations {
 }
 
 dependencies {
-	compile "com.mchange:c3p0:0.9.5.2"
-	compile "org.mariadb.jdbc:mariadb-java-client:1.4.+"
+	compile "com.mchange:c3p0:0.9.+"
+	compile "org.mariadb.jdbc:mariadb-java-client:1.+"
 	compile 'org.jdbi:jdbi:2.73'
 	compile 'org.antlr:stringtemplate:3.2.1'
 	compile "com.fasterxml.jackson.core:jackson-core:2.8.1"

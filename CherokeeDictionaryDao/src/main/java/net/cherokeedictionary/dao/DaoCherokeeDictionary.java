@@ -34,7 +34,7 @@ import net.cherokeedictionary.util.DaoUtils;
 @UseStringTemplate3StatementLocator
 public abstract class DaoCherokeeDictionary {
 
-	public static final String table_entries = "dictionary_entries";
+	public static final String table_entries = "likespreadsheets";
 	public static final String table_indexSyllabary = SearchIndex.Table.tableSyllabary;
 	public static final String table_indexLatin = SearchIndex.Table.tableLatin;
 	public static final String table_indexEnglish = SearchIndex.Table.tableEnglish;

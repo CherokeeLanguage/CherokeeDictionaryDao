@@ -138,7 +138,7 @@ public class Db implements ConnectionFactory, ConnectionCustomizer {
 
 	@Override
 	public void onCheckOut(Connection arg0, String arg1) throws Exception {
-		arg0.setCatalog("cherokeedictionary");
+		arg0.setCatalog("likespreadsheets");
 		arg0.setAutoCommit(true);
 		arg0.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
 	}
