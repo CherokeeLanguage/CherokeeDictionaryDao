@@ -21,7 +21,7 @@ public class SimpleIndexer {
 		int size=0;
 		int sum=0;
 		do {
-			List<DictionaryEntry> forIndexing=dao.needsIndexing(100);
+			List<DictionaryEntry> forIndexing=dao.needsIndexing(500);
 			if (forIndexing==null || forIndexing.size()==0) {
 				break;
 			}

@@ -18,7 +18,7 @@ public class GetCedCorpus {
 		File syllabaryCorpus = new File("output/ced.chr4");
 		List<String> english = new ArrayList<>();
 		List<String> cherokee = new ArrayList<>();
-		DaoCherokeeDictionary.init();
+//		DaoCherokeeDictionary.init();
 		DaoCherokeeDictionary dao = DaoCherokeeDictionary.dao;
 		List<DictionaryEntry> entries = dao.getRecordsForSource("ced");
 		System.out.println("Loaded "+entries.size()+" CED entries.");

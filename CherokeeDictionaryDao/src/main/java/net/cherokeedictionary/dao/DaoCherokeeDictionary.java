@@ -34,7 +34,7 @@ import net.cherokeedictionary.util.DaoUtils;
 @UseStringTemplate3StatementLocator
 public abstract class DaoCherokeeDictionary {
 
-	public static final String table_entries = "likespreadsheets";
+	public static final String table_entries = "dictionary_entries";
 	public static final String table_indexSyllabary = SearchIndex.Table.tableSyllabary;
 	public static final String table_indexLatin = SearchIndex.Table.tableLatin;
 	public static final String table_indexEnglish = SearchIndex.Table.tableEnglish;
@@ -147,7 +147,7 @@ public abstract class DaoCherokeeDictionary {
 	@RegisterMapper(MapperLikespreadsheet.class)
 	public abstract List<LikeSpreadsheetsRecord> getLikespreadsheetRecords(@Bind("source") String source);
 	
-	@SqlBatch("update "+table_likespreadsheets //
+	@SqlBatch(transactional=false,value="update "+table_likespreadsheets //
 			+" set" //
 			+ " sentencesyllr=:sentencesyllr," //
 			+ " sentenceq=:sentenceq," //
@@ -170,7 +170,7 @@ public abstract class DaoCherokeeDictionary {
 	 * @param entries
 	 * @return
 	 */
-	@SqlBatch("insert into " + table_entries + " (source, syllabary, pronunciation, definition, json, created)"
+	@SqlBatch(transactional=false,value="insert into " + table_entries + " (source, syllabary, pronunciation, definition, json, created)"
 			+ " values " + "(:source, :syllabary, :pronunciation, :definition, :json, NOW())")
 	@GetGeneratedKeys
 	public abstract int[] addNewDictionaryEntries(@BindDictionaryEntry Iterable<DictionaryEntry> entries);
@@ -181,11 +181,11 @@ public abstract class DaoCherokeeDictionary {
 	 * @param entries
 	 * @return
 	 */
-	@SqlBatch("insert into " + table_entries + " (id, source, syllabary, pronunciation, definition, json, created)"
+	@SqlBatch(transactional=false,value="insert into " + table_entries + " (id, source, syllabary, pronunciation, definition, json, created)"
 			+ " select * from " + "(select :id as id, :source as source, :syllabary as syllabary,"
 			+ " :pronunciation as pronunciation, :definition as definition, :json as json, NOW() as created) as TMP"
 			+ " where not exists (select 1 from " + table_entries + " where id=:id AND :id!=0)")
-	@BatchChunkSize(25)
+	@BatchChunkSize(100)
 	@GetGeneratedKeys
 	public abstract int[] addNewDictionaryEntriesWithId(@BindDictionaryEntry Iterable<DictionaryEntry> entries);
 
@@ -193,13 +193,13 @@ public abstract class DaoCherokeeDictionary {
 			+ " definition=:definition, json=:json where id=:id")
 	public abstract int updateDictionaryEntry(@BindDictionaryEntry DictionaryEntry entry);
 
-	@SqlBatch("update " + table_entries + " set source=:source, syllabary=:syllabary, pronunciation=:pronunciation,"
+	@SqlBatch(transactional=false,value="update " + table_entries + " set source=:source, syllabary=:syllabary, pronunciation=:pronunciation,"
 			+ " definition=:definition, json=:json where id=:id")
-	@BatchChunkSize(25)
+	@BatchChunkSize(100)
 	public abstract int[] updateDictionaryEntries(@BindDictionaryEntry Iterable<DictionaryEntry> entries);
 
-	@SqlBatch("delete from " + table_entries + " where id=:id")
-	@BatchChunkSize(25)
+	@SqlBatch(transactional=false,value="delete from " + table_entries + " where id=:id")
+	@BatchChunkSize(100)
 	public abstract int[] deleteDictionaryEntriesById(@Bind("id") Iterable<Integer> ids);
 
 	@SqlUpdate("delete from " + table_entries + " where id=:id")
@@ -208,69 +208,69 @@ public abstract class DaoCherokeeDictionary {
 	/**
 	 * Add records to indexing table. Prefilled id is mandatory.
 	 */
-	@SqlBatch("insert into " + table_indexEnglish + " (id, source, syllabary, pronunciation, definition,"
+	@SqlBatch(transactional=false,value="insert into " + table_indexEnglish + " (id, source, syllabary, pronunciation, definition,"
 			+ " forms, examples, created)" + " select * from "
 			+ "(select :id as id, :source as source, :syllabary as syllabary,"
 			+ " :pronunciation as pronunciation, :definition as definition,"
 			+ " :forms as forms, :examples as examples, NOW() as created) as TMP" + " where not exists (select 1 from "
 			+ table_indexEnglish + " where id=:id AND :id!=0)")
-	@BatchChunkSize(25)
+	@BatchChunkSize(100)
 	@GetGeneratedKeys
 	public abstract int[] addNewIndexEnglishEntriesById(@BindEnglishIndex Iterable<DictionaryEntry> entries);
 
-	@SqlBatch("update " + table_indexEnglish
+	@SqlBatch(transactional=false,value="update " + table_indexEnglish
 			+ " set source=:source, syllabary=:syllabary, pronunciation=:pronunciation,"
 			+ " definition=:definition, forms=:forms, examples=:examples" + " where id=:id")
-	@BatchChunkSize(25)
+	@BatchChunkSize(100)
 	public abstract int[] updateIndexEnglishEntriesById(@BindEnglishIndex Iterable<DictionaryEntry> entry);
 
-	@SqlBatch("delete from " + table_indexEnglish + " where id=:id")
-	@BatchChunkSize(25)
+	@SqlBatch(transactional=false,value="delete from " + table_indexEnglish + " where id=:id")
+	@BatchChunkSize(100)
 	public abstract int[] deleteIndexEnglishEntriesById(@Bind("id") Iterable<Integer> ids);
 
 	/**
 	 * Add records to indexing table. Prefilled id is mandatory.
 	 */
-	@SqlBatch("insert into " + table_indexSyllabary + " (id, source, syllabary, pronunciation, definition,"
+	@SqlBatch(transactional=false,value="insert into " + table_indexSyllabary + " (id, source, syllabary, pronunciation, definition,"
 			+ " forms, examples, created)" + " select * from "
 			+ "(select :id as id, :source as source, :syllabary as syllabary,"
 			+ " :pronunciation as pronunciation, :definition as definition,"
 			+ " :forms as forms, :examples as examples, NOW() as created) as TMP" + " where not exists (select 1 from "
 			+ table_indexSyllabary + " where id=:id AND :id!=0)")
-	@BatchChunkSize(25)
+	@BatchChunkSize(100)
 	@GetGeneratedKeys
 	public abstract int[] addNewIndexSyllabaryEntriesById(@BindSyllabaryIndex Iterable<DictionaryEntry> entries);
 
-	@SqlBatch("update " + table_indexSyllabary
+	@SqlBatch(transactional=false,value="update " + table_indexSyllabary
 			+ " set source=:source, syllabary=:syllabary, pronunciation=:pronunciation,"
 			+ " definition=:definition, forms=:forms, examples=:examples" + " where id=:id")
-	@BatchChunkSize(25)
+	@BatchChunkSize(100)
 	public abstract int[] updateIndexSyllabaryEntriesById(@BindSyllabaryIndex Iterable<DictionaryEntry> entry);
 
-	@SqlBatch("delete from " + table_indexSyllabary + " where id=:id")
-	@BatchChunkSize(25)
+	@SqlBatch(transactional=false,value="delete from " + table_indexSyllabary + " where id=:id")
+	@BatchChunkSize(100)
 	public abstract int[] deleteIndexSyllabaryEntriesById(@Bind("id") Iterable<Integer> ids);
 
 	/**
 	 * Add records to indexing table. Prefilled id is mandatory.
 	 */
-	@SqlBatch("insert into " + table_indexLatin + " (id, source, syllabary, pronunciation, definition,"
+	@SqlBatch(transactional=false,value="insert into " + table_indexLatin + " (id, source, syllabary, pronunciation, definition,"
 			+ " forms, examples, created)" + " select * from "
 			+ "(select :id as id, :source as source, :syllabary as syllabary,"
 			+ " :pronunciation as pronunciation, :definition as definition,"
 			+ " :forms as forms, :examples as examples, NOW() as created) as TMP" + " where not exists (select 1 from "
 			+ table_indexLatin + " where id=:id AND :id!=0)")
-	@BatchChunkSize(25)
+	@BatchChunkSize(100)
 	@GetGeneratedKeys
 	public abstract int[] addNewIndexLatinEntriesById(@BindLatinIndex Iterable<DictionaryEntry> entries);
 
-	@SqlBatch("update " + table_indexLatin + " set source=:source, syllabary=:syllabary, pronunciation=:pronunciation,"
+	@SqlBatch(transactional=false,value="update " + table_indexLatin + " set source=:source, syllabary=:syllabary, pronunciation=:pronunciation,"
 			+ " definition=:definition, forms=:forms, examples=:examples" + " where id=:id")
-	@BatchChunkSize(25)
+	@BatchChunkSize(100)
 	public abstract int[] updateIndexLatinEntriesById(@BindLatinIndex Iterable<DictionaryEntry> entry);
 
-	@SqlBatch("delete from " + table_indexLatin + " where id=:id")
-	@BatchChunkSize(25)
+	@SqlBatch(transactional=false,value="delete from " + table_indexLatin + " where id=:id")
+	@BatchChunkSize(100)
 	public abstract int[] deleteIndexLatinEntriesById(@Bind("id") Iterable<Integer> ids);
 
 	@SqlQuery("select id, source, json, modified from " + table_entries
@@ -288,9 +288,9 @@ public abstract class DaoCherokeeDictionary {
 	 * 
 	 * @param forIndexing
 	 */
-	@SqlBatch("update " + table_entries + " set indexed=now(), modified=modified"
+	@SqlBatch(transactional=false,value="update " + table_entries + " set indexed=now(), modified=modified"
 			+ " where id=:id and CAST(modified as DATETIME) = CAST(:modified as DATETIME)")
-	@BatchChunkSize(25)
+	@BatchChunkSize(100)
 	public abstract int[] updateIndexMarksById(@BindDictionaryEntry Iterable<DictionaryEntry> forIndexing);
 
 	@SqlQuery("select id from " + table_indexEnglish + " where id in (<ids>)")
